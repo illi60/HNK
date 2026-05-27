@@ -2323,3 +2323,7 @@ body.hnk-body #tooltip{
 .hnk-post-content blockquote cite{display:block;font:700 9px/1 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--ember) !important;margin-bottom:8px;font-style:normal}
 .hnk-post-content .codebox,.hnk-post-content dl.codebox{background:#070809 !important;color:var(--bone) !important;border:1px solid rgba(255,255,255,.1) !important;margin:0 0 14px;padding:10px 14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px}
 .hnk-post-content .codebox dt,.hnk-post-content dl.codebox dt{font:700 9px/1 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--ember) !important;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:6px}
+/* === Profil (/u1) — avatar rond rempli quelle que soit la taille === */
+.hnk-profile-card .av{overflow:hidden}
+.hnk-profile-card .av a{display:block;width:100%;height:100%}
+.hnk-profile-card .av img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;border-radius:50%!important}

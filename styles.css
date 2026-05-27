@@ -2327,3 +2327,18 @@ body.hnk-body #tooltip{
 .hnk-profile-card .av{overflow:hidden}
 .hnk-profile-card .av a{display:block;width:100%;height:100%}
 .hnk-profile-card .av img{width:100%!important;height:100%!important;object-fit:cover!important;display:block!important;border-radius:50%!important}
+
+/* === Profil — bulle : groupe + 3 stats (Messages/Rang/Experience) === */
+.hnk-profile-card .grp{font:800 12px/1 var(--ui);letter-spacing:.34em;text-transform:uppercase;color:var(--bone);margin-top:9px}
+.hnk-profile-card .grp:empty{display:none}
+.hnk-profile-card .rl{margin-top:7px}
+.hnk-profile-card .stat3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);margin-top:18px}
+.hnk-profile-card .stat3 .st{background:#0B0D11;padding:16px 8px;display:flex;flex-direction:column;align-items:center;gap:7px}
+.hnk-profile-card .stat3 .st b{font-family:var(--display);font-size:24px;line-height:1;color:var(--white);font-weight:400}
+.hnk-profile-card .stat3 .st b.rang{font-size:28px;color:var(--ember-hot);text-shadow:0 0 12px rgba(255,87,34,.5)}
+.hnk-profile-card .stat3 .lbl{font:700 8px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--smoke)}
+
+/* === Profil — logo de clan (au-dessus du nom de groupe) === */
+.hnk-profile-card .clanlogo{margin:14px auto 2px;display:flex;justify-content:center;align-items:center}
+.hnk-profile-card .clanlogo:empty{display:none}
+.hnk-profile-card .clanlogo img{height:48px;width:auto;max-width:130px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,87,34,.35))}

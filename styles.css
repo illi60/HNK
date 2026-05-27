@@ -2306,7 +2306,8 @@ body.hnk-body #tooltip{
 /* ============================================================
    VIEWTOPIC — avatar, boutons d'action, citations (polish)
    ============================================================ */
-.hnk-post-side .av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0;display:block}
+.hnk-post-side .av img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;min-width:0!important;min-height:0!important;object-fit:cover!important;object-position:center top!important;z-index:0;display:block!important}
+.hnk-post-side .av a{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important}
 .hnk-post-side .av::after{z-index:1}
 .hnk-post-meta{border-top:1px solid var(--line)}
 .hnk-post-act{color:var(--smoke);font-size:10px;letter-spacing:.16em}

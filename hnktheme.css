@@ -2222,15 +2222,19 @@ body.hnk-body table:not(.hnk-keep):not(.hnk-navbar){
 }
 body.hnk-body table td{ color:var(--bone) !important }
 
-/* Messages info/erreur PHPBB */
-body.hnk-body .panel,
+/* Messages info/erreur PHPBB (NB : .panel retiré de ce groupe — il a son
+   propre style de carte neutre l.~2003 ; sinon chaque section d'inscription
+   ressemblait a une boite d'erreur) */
 body.hnk-body .error,
 body.hnk-body .errorbox,
+body.hnk-body .errorlist,
 body.hnk-body .infobox{
   background:linear-gradient(180deg, rgba(255,87,34,.08), rgba(255,87,34,.02)) !important;
   border:1px solid rgba(255,87,34,.3) !important;
+  border-left:3px solid var(--ember) !important;
   color:var(--bone) !important;
-  padding:18px !important;
+  padding:16px 18px !important;
+  border-radius:0 !important;
 }
 
 /* Postbody (sujets non templatés) */
@@ -2446,3 +2450,149 @@ body.hnk-body #tooltip{
 .hnk-profile-card .clanlogo{margin:14px auto 2px;display:flex;justify-content:center;align-items:center}
 .hnk-profile-card .clanlogo:empty{display:none}
 .hnk-profile-card .clanlogo img{height:48px;width:auto;max-width:130px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,87,34,.35))}
+
+/* ============================================================
+   AUTH & SYSTEME — connexion, inscription, reglement, confirmations,
+   erreurs / infos, mot de passe oublie.
+   Templates FA PHPBB3 couverts : login_body, profile_add_body, agreement,
+   confirm_body, error_body, message_body, profile_send_password.
+   Primitives natives : .panel > .inner > .corners + h1.page-title
+   + dl/dt/dd + fieldset(.submit-buttons/.fields2) + #preview.post.row2.
+   Tout est scope sous body.hnk-body et place APRES le bloc universel pour
+   gagner a specificite egale. Aucune decoration ajoutee sur .panel generique
+   (le profil utilise .hnk-profile-info .panel, on n'y touche pas).
+   ============================================================ */
+
+/* — Coins decoratifs prosilver masques (design plat HNK) — */
+body.hnk-body .corners-top,
+body.hnk-body .corners-bottom{display:none !important}
+
+/* — Interieur des cartes panel : padding homogene (le panel lui-meme est en
+     padding:0 dans le bloc universel) — */
+body.hnk-body .panel > .inner{padding:18px 22px !important;background:transparent !important}
+
+/* — Titres de section .page-title : reset du bleu prosilver + accent ember — */
+body.hnk-body h1.page-title,
+body.hnk-body .page-title{
+  font-family:var(--display) !important;font-weight:700 !important;
+  font-size:18px !important;letter-spacing:.14em !important;text-transform:uppercase !important;
+  color:var(--white) !important;background:transparent !important;
+  border:0 !important;border-bottom:1px solid rgba(255,87,34,.22) !important;
+  padding:0 0 10px !important;margin:4px 0 16px !important;position:relative;
+}
+body.hnk-body h1.page-title::after,
+body.hnk-body .page-title::after{
+  content:"";position:absolute;left:0;bottom:-1px;width:54px;height:2px;
+  background:var(--ember);box-shadow:0 0 10px rgba(255,87,34,.6);
+}
+
+/* — fieldset transparent quand niche dans un panel (evite la double carte) — */
+body.hnk-body .panel fieldset,
+body.hnk-body fieldset.fields2,
+body.hnk-body fieldset.submit-buttons{
+  background:transparent !important;border:0 !important;box-shadow:none !important;
+  margin:0 !important;padding:0 !important;
+}
+body.hnk-body .panel fieldset legend{
+  font:700 10px/1 var(--ui) !important;letter-spacing:.2em !important;
+  text-transform:uppercase !important;color:var(--ember) !important;padding:0 6px !important;
+}
+
+/* — Lignes de formulaire dl/dt/dd : empilees, lisibles (on annule le float prosilver) — */
+body.hnk-body .panel dl,
+body.hnk-body .content dl{display:block !important;margin:0 0 18px !important;padding:0 !important;border:0 !important;overflow:visible !important}
+body.hnk-body .panel dl:last-child{margin-bottom:2px !important}
+body.hnk-body .panel dt,
+body.hnk-body .content dt{float:none !important;width:auto !important;margin:0 0 7px !important;padding:0 !important;border:0 !important}
+body.hnk-body .panel dt label,
+body.hnk-body .content dt label,
+body.hnk-body .panel dt > strong{
+  display:block;font:700 10px/1.4 var(--ui) !important;letter-spacing:.18em !important;
+  text-transform:uppercase !important;color:var(--ember) !important;
+}
+body.hnk-body .panel dd,
+body.hnk-body .content dd{float:none !important;margin:0 !important;padding:0 !important;color:var(--bone) !important}
+/* champs texte plein largeur, cadres */
+body.hnk-body .panel dd input.inputbox,
+body.hnk-body .content dd input.inputbox,
+body.hnk-body .panel dd input[type=text],
+body.hnk-body .panel dd input[type=password],
+body.hnk-body .panel dd input[type=email]{width:100% !important;max-width:440px !important;box-sizing:border-box !important}
+body.hnk-body .inputbox.narrow{max-width:320px !important}
+/* groupes radio / checkbox en ligne (Oui / Non...) */
+body.hnk-body .panel dd label,
+body.hnk-body .content dd label{
+  display:inline-flex !important;align-items:center;gap:6px;margin:0 16px 6px 0 !important;
+  font:500 13px/1.4 var(--ui) !important;letter-spacing:normal !important;
+  text-transform:none !important;color:var(--bone) !important;
+}
+/* notes explicatives .italic */
+body.hnk-body .italic{color:var(--smoke) !important;font-style:italic;font-size:11.5px !important;line-height:1.5}
+body.hnk-body dd .italic{display:inline-block;margin-top:5px}
+
+/* — Boutons d'envoi centres (.submit-buttons + p.center) — */
+body.hnk-body fieldset.submit-buttons,
+body.hnk-body p.center{text-align:center !important;margin-top:18px !important}
+body.hnk-body fieldset.submit-buttons input,
+body.hnk-body p.center input{margin:0 6px !important}
+
+/* — Bouton secondaire / annuler en ghost (ex : NON de confirm_body) — */
+body.hnk-body input[name="cancel"]{
+  background:transparent !important;color:var(--ember) !important;
+  border:1px solid rgba(255,87,34,.55) !important;box-shadow:none !important;
+}
+body.hnk-body input[name="cancel"]:hover{background:rgba(255,87,34,.12) !important;color:var(--ember-hot) !important;box-shadow:0 0 14px rgba(255,87,34,.25) !important}
+
+/* — CONFIRMATION (confirm_body) : carte centree facon modale — */
+body.hnk-body .panel:has(input[name="confirm"]){
+  max-width:560px !important;margin:40px auto !important;
+  background:linear-gradient(180deg,#15181E,#0C0E12) !important;
+  border:1px solid rgba(255,87,34,.3) !important;
+  box-shadow:0 24px 60px rgba(0,0,0,.6),0 0 60px rgba(255,87,34,.07) !important;
+}
+body.hnk-body .panel:has(input[name="confirm"]) .page-title{font-size:16px !important}
+body.hnk-body .panel:has(input[name="confirm"]) p{color:var(--bone) !important;font:400 14px/1.6 var(--ui) !important;text-align:center;margin:0 0 8px}
+
+/* — ERREUR (error_body) : #preview.post.row2 SANS .postbody (≠ previsualisation posting) — */
+body.hnk-body #preview.post.row2:not(:has(.postbody)){max-width:600px !important;margin:36px auto !important}
+body.hnk-body #preview.post.row2:not(:has(.postbody)) .inner::before{
+  content:"\8B66";display:block;text-align:center;font-family:var(--jp,serif);
+  font-size:34px;color:var(--ember);text-shadow:0 0 16px rgba(255,87,34,.5);margin:2px 0 8px;opacity:.92;
+}
+body.hnk-body #preview.post.row2:not(:has(.postbody)) .inner > p.center{
+  color:var(--ember-hot) !important;font:700 14px/1.6 var(--ui) !important;
+  letter-spacing:.02em !important;text-align:center !important;padding:4px 10px !important;
+}
+
+/* — Indicateur de force du mot de passe (#pwd_bad / #pwd_middle / #pwd_good) — */
+body.hnk-body #pwd_bad,
+body.hnk-body #pwd_middle,
+body.hnk-body #pwd_good{
+  display:inline-block;margin-top:7px;font:700 9px/1 var(--ui);letter-spacing:.2em;
+  text-transform:uppercase;padding:6px 11px;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);
+}
+body.hnk-body #pwd_bad{background:rgba(107,31,26,.32);color:#FF6E5A;border:1px solid #6B1F1A}
+body.hnk-body #pwd_middle{background:rgba(255,87,34,.16);color:var(--ember-hot);border:1px solid rgba(255,87,34,.5)}
+body.hnk-body #pwd_good{background:rgba(95,164,106,.16);color:#7FCF8A;border:1px solid #5FA46A}
+
+/* — Meta haut de page (derniere visite / heure) discretes — */
+body.hnk-body p.rightside,
+body.hnk-body p.right.rightside{color:var(--smoke) !important;font-size:11px !important;text-align:right;margin:0 0 4px}
+
+/* — Reglement (agreement) : texte lisible, icone, cases a cocher — */
+body.hnk-body #frmAgreement .panel > .inner{line-height:1.7}
+body.hnk-body #frmAgreement #fb_explain{color:var(--bone) !important}
+body.hnk-body #frmAgreement img.left{margin:0 14px 8px 0}
+body.hnk-body #frmAgreement p input[type=checkbox]{margin-right:8px}
+
+/* — Conteneur UCP (profil/inscription) transparent — */
+body.hnk-body #cp-main.ucp-main,
+body.hnk-body .ucp-main{background:transparent !important}
+
+/* — responsive — */
+@media (max-width:680px){
+  body.hnk-body .panel:has(input[name="confirm"]),
+  body.hnk-body #preview.post.row2:not(:has(.postbody)){margin:20px auto !important}
+  body.hnk-body .panel dd input.inputbox{max-width:100% !important}
+}
+/* ===== Fin AUTH & SYSTEME ===== */

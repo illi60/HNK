@@ -1439,6 +1439,12 @@ body.hnk-body .hnk-footer{
   background:linear-gradient(135deg, var(--ember-deep), #1A0808);
   border:2px solid var(--ember);
   box-shadow:0 0 16px rgba(255,87,34,.3);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;padding:0;
+}
+/* avatar reel injecte via {memberrow.AVATAR_IMG} -> remplit le rond */
+.hnk-member .av img{
+  width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
+  object-fit:cover;display:block;border-radius:50%;
 }
 .hnk-member .nm{font:800 14px/1 var(--display);letter-spacing:.08em;color:var(--white);text-transform:uppercase}
 .hnk-member .rl{font:700 8.5px/1 var(--ui);letter-spacing:.36em;text-transform:uppercase;color:var(--ember);margin-top:7px}
@@ -1448,6 +1454,12 @@ body.hnk-body .hnk-footer{
   font:600 8.5px/1 var(--ui);letter-spacing:.24em;text-transform:uppercase;color:var(--smoke);
 }
 .hnk-member .st b{display:block;color:var(--white);font:800 16px/1.4 var(--display)}
+/* memberlist : meta inscription + derniere visite (paires label/valeur) */
+.hnk-member .meta{display:grid;gap:9px;margin-top:2px}
+.hnk-member .mrow{display:block;text-align:center}
+.hnk-member .mrow .k{display:block;font:700 8px/1 var(--ui);letter-spacing:.22em;text-transform:uppercase;color:var(--ember);margin-bottom:3px}
+.hnk-member .mrow .v{display:block;font:500 11px/1.35 var(--ui);color:var(--bone)}
+.hnk-nouser{grid-column:1/-1;text-align:center;padding:26px 0;color:var(--smoke);font:500 13px/1.4 var(--ui)}
 
 /* ============================================================
    profile_view
@@ -2568,9 +2580,15 @@ body.hnk-body #preview.post.row2:not(:has(.postbody)) .inner > p.center{
 body.hnk-body #pwd_bad,
 body.hnk-body #pwd_middle,
 body.hnk-body #pwd_good{
-  display:inline-block;margin-top:7px;font:700 9px/1 var(--ui);letter-spacing:.2em;
+  margin-top:7px;font:700 9px/1 var(--ui);letter-spacing:.2em;
   text-transform:uppercase;padding:6px 11px;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);
 }
+/* NE PAS forcer display : FA garde ces div en display:none et n'affiche
+   la pastille active qu'en posant un style inline display:block (jQuery .show).
+   On ne stylise donc inline-block QUE l'element reellement montre. */
+body.hnk-body #pwd_bad[style*="block"],
+body.hnk-body #pwd_middle[style*="block"],
+body.hnk-body #pwd_good[style*="block"]{display:inline-block !important}
 body.hnk-body #pwd_bad{background:rgba(107,31,26,.32);color:#FF6E5A;border:1px solid #6B1F1A}
 body.hnk-body #pwd_middle{background:rgba(255,87,34,.16);color:var(--ember-hot);border:1px solid rgba(255,87,34,.5)}
 body.hnk-body #pwd_good{background:rgba(95,164,106,.16);color:#7FCF8A;border:1px solid #5FA46A}
@@ -2585,9 +2603,15 @@ body.hnk-body #frmAgreement #fb_explain{color:var(--bone) !important}
 body.hnk-body #frmAgreement img.left{margin:0 14px 8px 0}
 body.hnk-body #frmAgreement p input[type=checkbox]{margin-right:8px}
 
-/* — Conteneur UCP (profil/inscription) transparent — */
+/* — Inscription / edition profil : carte cadree (max-width centree) + sections allegees — */
 body.hnk-body #cp-main.ucp-main,
 body.hnk-body .ucp-main{background:transparent !important}
+body.hnk-body .panel.row3{max-width:680px !important;margin:24px auto !important}
+/* les panels internes deviennent de simples sections (pas de carte dans la carte) */
+body.hnk-body .panel.row3 .panel{background:transparent !important;border:0 !important;box-shadow:none !important;margin:0 0 4px !important}
+body.hnk-body .panel.row3 .panel>.inner{padding:0 !important}
+/* premier titre de section : un peu d'air en haut */
+body.hnk-body #cp-main.ucp-main .page-title:first-child{margin-top:8px !important}
 
 /* — responsive — */
 @media (max-width:680px){
@@ -2595,4 +2619,33 @@ body.hnk-body .ucp-main{background:transparent !important}
   body.hnk-body #preview.post.row2:not(:has(.postbody)){margin:20px auto !important}
   body.hnk-body .panel dd input.inputbox{max-width:100% !important}
 }
+/* — CONNEXION (login) : sortie systeme prosilver, AUCUN template editable.
+     On cible donc les classes natives : .h3 (titres), a.button1/2 (liens-boutons),
+     hr.dashed (separateur). — */
+body.hnk-body .panel .content .h3{
+  font-family:var(--display) !important;font-weight:700 !important;font-size:16px !important;
+  letter-spacing:.12em !important;text-transform:uppercase !important;color:var(--white) !important;
+  background:transparent !important;border:0 !important;border-bottom:1px solid rgba(255,87,34,.22) !important;
+  padding:0 0 9px !important;margin:2px 0 16px !important;line-height:1.35 !important;position:relative;
+}
+body.hnk-body .panel .content .h3::after{content:"";position:absolute;left:0;bottom:-1px;width:48px;height:2px;background:var(--ember);box-shadow:0 0 10px rgba(255,87,34,.6)}
+/* liens-boutons (ex : « S'enregistrer ») rendus comme les boutons ember */
+body.hnk-body a.button1,
+body.hnk-body a.button2{
+  display:inline-block !important;background:var(--ember) !important;color:#000 !important;
+  border:1px solid var(--ember) !important;border-radius:0 !important;padding:10px 22px !important;
+  font:700 11px/1 var(--ui) !important;letter-spacing:.28em !important;text-transform:uppercase !important;
+  text-decoration:none !important;cursor:pointer !important;
+  clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%) !important;
+  box-shadow:0 0 14px rgba(255,87,34,.3) !important;transition:background .15s,box-shadow .15s !important;
+}
+body.hnk-body a.button1:hover,
+body.hnk-body a.button2:hover{background:var(--ember-hot) !important;box-shadow:0 0 22px rgba(255,87,34,.55) !important;color:#000 !important}
+/* separateur pointille ember (remplace le <hr class="dashed"> gris) */
+body.hnk-body hr.dashed{border:0 !important;border-top:1px dashed rgba(255,87,34,.3) !important;height:0 !important;background:none !important;margin:14px 0 !important}
+/* formulaire de connexion + bloc « S'enregistrer » : cadres et centres */
+body.hnk-body form[name="form_login"]{max-width:560px !important;margin:24px auto 0 !important;display:block}
+body.hnk-body form[name="form_login"] .panel{margin-bottom:0 !important}
+body.hnk-body .panel:has(a.button2[href="/register"]){max-width:560px !important;margin:10px auto 24px !important}
+
 /* ===== Fin AUTH & SYSTEME ===== */

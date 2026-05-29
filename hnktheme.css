@@ -2291,6 +2291,72 @@ body.hnk-body #tooltip{
 .hnk-btn.ghost{background:transparent;color:var(--bone);border:1px solid rgba(255,255,255,.18);box-shadow:none}
 .hnk-btn.ghost:hover{border-color:var(--ember);color:var(--ember-hot)}
 
+/* statuts HTML/BBCode/smileys + smileys popup */
+.hnk-bbstatus br{line-height:1.6}
+.hnk-options{flex-direction:row!important;flex-wrap:wrap;gap:8px 22px;align-items:center}
+.hnk-options label{color:var(--smoke);text-transform:none;letter-spacing:normal;font-weight:500;display:inline-flex;align-items:center;gap:6px;font-size:12px}
+.hnk-options input[type=checkbox]{accent-color:var(--ember)}
+.hnk-smilies{font:500 11px/1.6 var(--ui);color:var(--smoke)}
+.hnk-smilies a,.hnk-smilies img{vertical-align:middle}
+
+/* ============================================================
+   ÉDITEUR NATIF FORUMACTIF (sceditor) — thème HINOKUNI
+   ============================================================ */
+.hnk-editor{position:relative}
+.hnk-editor .sceditor-container,
+.sceditor-container{
+  border:1px solid rgba(255,255,255,.1)!important;
+  background:#0A0B0E!important;
+  border-radius:0!important;
+  font-family:var(--ui)!important;
+  max-width:100%!important
+}
+.sceditor-toolbar{
+  background:#101318!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+  padding:6px!important
+}
+.sceditor-group{
+  background:transparent!important;
+  border:0!important;
+  margin:2px 6px 2px 0!important;
+  border-radius:2px!important
+}
+.sceditor-button{
+  background:#1A1E25!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:2px!important;
+  margin:1px!important;
+  transition:border-color .15s,background .15s
+}
+.sceditor-button:hover,
+.sceditor-button.active{
+  background:#22272F!important;
+  border-color:var(--ember)!important
+}
+.sceditor-button div{filter:invert(.85) sepia(.2)}
+.sceditor-button:hover div,
+.sceditor-button.active div{filter:invert(.55) sepia(1) saturate(6) hue-rotate(-12deg)}
+.sceditor-container iframe,
+.sceditor-container textarea{
+  background:#0A0B0E!important;
+  color:var(--bone)!important
+}
+.sceditor-resize-grip{background:#101318!important}
+.sceditor-dropdown{
+  background:#101318!important;
+  border:1px solid var(--ember)!important;
+  color:var(--bone)!important
+}
+.sceditor-dropdown input,
+.sceditor-dropdown select,
+.sceditor-dropdown textarea{
+  background:#1A1E25!important;
+  color:var(--bone)!important;
+  border:1px solid rgba(255,255,255,.15)!important
+}
+.sceditor-dropdown a,.sceditor-dropdown label{color:var(--bone)!important}
+
 /* ============================================================
    VIEWFORUM — liste de sujets native ({TOPICS_LIST_BOX})
    ============================================================ */

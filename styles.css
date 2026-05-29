@@ -2345,6 +2345,37 @@ body.hnk-body #tooltip{
   background:#1A1E25!important;border:1px solid rgba(255,255,255,.15)!important}
 
 /* ============================================================
+   PRÉVISUALISATION ({POST_PREVIEW_BOX}) — thème HINOKUNI
+   scopé sur #preview pour ne pas affecter les posts du forum
+   ============================================================ */
+#preview.post{
+  background:#0A0B0E!important;border:1px solid rgba(255,255,255,.09)!important;border-radius:0!important;
+  box-shadow:inset 0 0 40px rgba(0,0,0,.5)!important;position:relative;overflow:hidden;
+  clip-path:polygon(0 0,calc(100% - 16px) 0,100% 16px,100% 100%,16px 100%,0 calc(100% - 16px))!important;
+  margin:0 0 20px!important
+}
+#preview.post::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--ember),rgba(255,87,34,0) 55%);z-index:2}
+#preview .inner{padding:18px 22px 22px!important;background:transparent!important}
+#preview .corners-top,#preview .corners-bottom{display:none!important}
+#preview .postbody{background:transparent!important;border:0!important;margin:0!important;padding:0!important}
+#preview .h3{
+  color:var(--ember)!important;background:transparent!important;border:0!important;
+  font:700 11px/1 var(--ui)!important;letter-spacing:.3em!important;text-transform:uppercase!important;
+  padding:0 0 12px!important;margin:0 0 14px!important;position:relative
+}
+#preview .h3::after{content:"";position:absolute;left:0;bottom:0;width:46px;height:2px;background:var(--ember)}
+#preview .content{color:var(--bone)!important;font:400 14px/1.7 var(--ui)!important;background:transparent!important}
+#preview .content p{margin:0 0 12px!important}
+#preview .content strong{color:#fff!important}
+#preview .content a{color:var(--ember)!important;text-decoration:none!important;border-bottom:1px solid rgba(255,87,34,.4)}
+#preview .content a:hover{color:var(--ember-hot)!important}
+#preview .content blockquote,#preview .content .quote{
+  border-left:2px solid var(--ember)!important;background:rgba(255,255,255,.03)!important;
+  margin:14px 0!important;padding:10px 16px!important;color:var(--smoke)!important;font-style:italic
+}
+
+/* ============================================================
    VIEWFORUM — liste de sujets native ({TOPICS_LIST_BOX})
    ============================================================ */
 .hnk-topiclist{margin:6px 0 4px}

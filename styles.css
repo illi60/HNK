@@ -1,5 +1,5 @@
 /* ============================================================
-   HINOKUNI — Forumactif theme
+   INOKUNI — Forumactif theme
    Direction artistique : Ninja Storm 4 / cel-shading sombre /
    cendres, braise, acier. Le contraste est central.
    ============================================================ */
@@ -526,6 +526,26 @@ a{color:inherit;text-decoration:none}
 .hnk-snap-stats .v.rank-b{ color:#5BA8D4; text-shadow:0 0 10px rgba(91,168,212,.4) }
 .hnk-snap-stats .v.rank-c{ color:var(--bone) }
 .hnk-snap-stats .v.rank-d{ color:var(--smoke) }
+/* Rang shinobi — coloration progressive par grade (data-hnk-rang -> .rk-*) */
+/* Appliquee partout : sceau viewtopic (.bigrang), spotlight Mon profil, feeds, viewforum */
+.rk-e{color:#6C7079 !important;text-shadow:none !important}
+.rk-d{color:#5FA46A !important;text-shadow:none !important}
+.rk-c{color:#4F97D6 !important;text-shadow:none !important}
+.rk-b{color:#A06CE0 !important;text-shadow:0 0 10px rgba(160,108,224,.55), 0 0 22px rgba(160,108,224,.3) !important}
+.rk-a{color:#FF7A3C !important;text-shadow:0 0 12px rgba(255,122,60,.65), 0 0 28px rgba(255,122,60,.4), 0 0 5px rgba(255,138,76,.55) !important}
+.rk-s{color:#FFC23C !important;text-shadow:0 0 14px rgba(255,194,60,.9), 0 0 34px rgba(255,194,60,.6), 0 0 64px rgba(255,138,76,.4) !important}
+/* ── Aura pulsante + particules ascendantes sur le grand sceau (.bigrang) — intensite croissante B → S ── */
+.bigrang.rk-b::before,.bigrang.rk-a::before,.bigrang.rk-s::before{content:"";position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:-1}
+.bigrang.rk-b::before{width:120px;height:120px;background:radial-gradient(circle, rgba(160,108,224,.34), transparent 66%);animation:hnkRankAura 3.6s ease-in-out infinite}
+.bigrang.rk-a::before{width:150px;height:150px;background:radial-gradient(circle, rgba(255,122,60,.42), transparent 64%);animation:hnkRankAura 3s ease-in-out infinite}
+.bigrang.rk-s::before{width:178px;height:178px;background:radial-gradient(circle, rgba(255,194,60,.52), transparent 62%);animation:hnkRankAura 2.3s ease-in-out infinite}
+.bigrang.rk-b::after,.bigrang.rk-a::after,.bigrang.rk-s::after{content:"";position:absolute;left:50%;bottom:6px;width:3px;height:3px;border-radius:50%;background:#FFF1CF;pointer-events:none;z-index:3;opacity:0;filter:drop-shadow(0 0 3px rgba(255,170,80,.95))}
+.bigrang.rk-b::after{box-shadow:-22px 4px 0 -.5px #FFE4A8,20px 0 0 -.5px #FFF1CF,-8px 6px 0 -1px #FFD98A,10px 8px 0 -1px #FFF1CF;animation:hnkRankRise 3.2s ease-in infinite}
+.bigrang.rk-a::after{box-shadow:-26px 4px 0 -.5px #FFE4A8,24px 0 0 -.5px #FFF1CF,-10px 6px 0 -1px #FFD98A,14px 8px 0 -1px #FFF1CF,0 -4px 0 -.5px #FFFFFF,-16px 10px 0 -1px #FFE4A8;animation:hnkRankRise 2.6s ease-in infinite}
+.bigrang.rk-s::after{box-shadow:-30px 4px 0 0 #FFE4A8,28px 0 0 -.5px #FFF1CF,-12px 6px 0 -.5px #FFD98A,16px 9px 0 -.5px #FFFFFF,0 -5px 0 -.5px #FFFFFF,-20px 10px 0 -1px #FFE4A8,22px 11px 0 -1px #FFF1CF,6px 14px 0 -1px #FFD98A;animation:hnkRankRise 2.1s ease-in infinite}
+@keyframes hnkRankAura{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(.9)}50%{opacity:.95;transform:translate(-50%,-50%) scale(1.12)}}
+@keyframes hnkRankRise{0%{transform:translateY(0) scale(1);opacity:0}15%{opacity:1}80%{opacity:.9}100%{transform:translateY(-64px) scale(.7);opacity:0}}
+@media (prefers-reduced-motion: reduce){.bigrang.rk-b::before,.bigrang.rk-a::before,.bigrang.rk-s::before,.bigrang.rk-b::after,.bigrang.rk-a::after,.bigrang.rk-s::after{animation:none}.bigrang.rk-b::after,.bigrang.rk-a::after,.bigrang.rk-s::after{opacity:.85}}
 .hnk-spotlight .avatar{
   position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);
   width:130px;height:130px;border-radius:50%;
@@ -2420,4 +2440,9 @@ body.hnk-body #tooltip{
 .hnk-profile-card .stat3 .st{background:#0B0D11;padding:16px 8px;display:flex;flex-direction:column;align-items:center;gap:7px}
 .hnk-profile-card .stat3 .st b{font-family:var(--display);font-size:24px;line-height:1;color:var(--white);font-weight:400}
 .hnk-profile-card .stat3 .st b.rang{font-size:28px;color:var(--ember-hot);text-shadow:0 0 12px rgba(255,87,34,.5)}
-.hnk-profile-card .stat3 .lbl{font:700 8px/1.2 var(--ui);letter-s
+.hnk-profile-card .stat3 .lbl{font:700 8px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--smoke)}
+
+/* === Profil — logo de clan (au-dessus du nom de groupe) === */
+.hnk-profile-card .clanlogo{margin:14px auto 2px;display:flex;justify-content:center;align-items:center}
+.hnk-profile-card .clanlogo:empty{display:none}
+.hnk-profile-card .clanlogo img{height:48px;width:auto;max-width:130px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(255,87,34,.35))}

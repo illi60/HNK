@@ -164,14 +164,8 @@
       if (c) fillCard(card, c);
       if (!c) { queue.push(function () { return fetchCard(card, url); }); pump(); }
     }
-    if ('IntersectionObserver' in window) {
-      var io = new IntersectionObserver(function (es) {
-        es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); enrich(e.target); } });
-      }, { rootMargin: '200px 0px' });
-      Array.prototype.forEach.call(cards, function (c) { io.observe(c); });
-    } else {
-      Array.prototype.forEach.call(cards, enrich);
-    }
+    /* Plus d'IntersectionObserver - enrichissement immediat. */
+    Array.prototype.forEach.call(cards, enrich);
   }
 
   function run() { doProfile(); doPosts(); doMembers(); }

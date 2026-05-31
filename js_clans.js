@@ -28,6 +28,62 @@
 (function () {
   'use strict';
 
+  /* ====== NOYAU HNK — annuaire des membres en UN gros pull (partage par tous les modules) ======
+     stale-while-revalidate : le cache sert au paint instantane ; on re-pull frais a chaque charge
+     (throttle 45s anti-burst). Source = page /memberlist (cartes .hnk-member[data-hnk-profile]),
+     pagination suivie et bornee. Si vide/echec -> les modules retombent sur leur logique d'origine. */
+  window.HNK = window.HNK || (function(){
+    var LS='hnk-dir-v1', THROTTLE=45000, MAXPAGES=12;
+    var _map=null, _t=0, _inflight=null, _subs=[];
+    function norm(s){return (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase();}
+    (function(){try{var o=JSON.parse(localStorage.getItem(LS)||'null');if(o&&o.map){_map=o.map;_t=o._t||0;}}catch(e){}})();
+    function parsePage(html, map){
+      var doc=new DOMParser().parseFromString(html,'text/html');
+      var cards=doc.querySelectorAll('.hnk-member[data-hnk-profile]');
+      Array.prototype.forEach.call(cards,function(c){
+        var nm=c.querySelector('.nm'); var name=nm?(nm.textContent||'').replace(/\s+/g,' ').trim():'';
+        if(!name)return;
+        var link=c.getAttribute('data-hnk-profile')||''; var um=link.match(/\/u(\d+)/);
+        var img=c.querySelector('.av img, img.avatar, img[src*="avatar"]'); var av=img?(img.getAttribute('src')||''):'';
+        if(/spacer|blank|smiley|emoji|i_icon/i.test(av))av='';
+        var cs=nm?(nm.querySelector('span[style*="color"]')||nm):null; var color='';
+        if(cs){var mm=(cs.getAttribute('style')||'').match(/color\s*:\s*([^;]+)/i);if(mm)color=mm[1].trim();}
+        map[norm(name)]={name:name,uid:um?um[1]:null,profileUrl:link||(um?'/u'+um[1]:null),avatar:av||null,color:color||null};
+      });
+      var nexts=[];
+      Array.prototype.forEach.call(doc.querySelectorAll('a[href*="memberlist"]'),function(a){
+        var h=a.getAttribute('href')||''; if(/[?&](start|page)=\d+/.test(h))nexts.push(h.split('#')[0]);
+      });
+      return nexts;
+    }
+    function pull(){
+      if(_inflight)return _inflight;
+      var map={}, seen={};
+      function page(url,depth){
+        seen[url]=1;
+        return window.fetch(url,{credentials:'same-origin',cache:'default'}).then(function(r){return r.text();}).then(function(h){
+          var nexts=parsePage(h,map);
+          if(depth<MAXPAGES){for(var i=0;i<nexts.length;i++){if(!seen[nexts[i]])return page(nexts[i],depth+1);}}
+          return null;
+        }).catch(function(){return null;});
+      }
+      _inflight=page('/memberlist',0).then(function(){
+        if(Object.keys(map).length){_map=map;_t=Date.now();try{localStorage.setItem(LS,JSON.stringify({map:_map,_t:_t}));}catch(e){}}
+        _inflight=null;
+        for(var i=0;i<_subs.length;i++){try{_subs[i](_map);}catch(e){}}
+        return _map;
+      });
+      return _inflight;
+    }
+    return {
+      get:function(p){return _map?(_map[norm(p)]||null):null;},
+      snapshot:function(){return _map;},
+      ready:function(){ if(_map&&(Date.now()-_t)<THROTTLE)return Promise.resolve(_map); return pull(); },
+      refresh:function(){return pull();},
+      onUpdate:function(cb){_subs.push(cb);}
+    };
+  })();
+
   /* =========================================================================
      1. CONFIGURATION  — la seule zone à éditer
      ========================================================================= */
@@ -297,14 +353,32 @@
   /* mémo en RAM pour éviter de re-résoudre le même pseudo dans une page */
   var memberMemo = {};
 
+  /* Applique au membre une entree de l'annuaire global HNK (0 fetch). */
+  function applyDir(m, d){
+    var data = { id:d.uid, profileUrl:(d.profileUrl || (d.uid?('/u'+d.uid):null)), avatar:(d.avatar||null), groupColor:(d.color||null) };
+    Object.assign(m.userData, data); m.resolved=true;
+    var pkey=m.pseudo.toLowerCase(); memberMemo[pkey]=data; Cache.set('member-'+pkey, { data:data });
+    return CONFIG.DEEP_ENRICH && m.userData.profileUrl ? deepEnrich(m) : m;
+  }
+  /* Resolution : annuaire global d'abord (1 seul pull /memberlist partage), repli cible
+     sur l'ancienne resolution 1-par-1 uniquement si l'annuaire echoue ou n'a pas le membre. */
   function resolveMember(m){
     var pkey = m.pseudo.toLowerCase();
     if(memberMemo[pkey]) { Object.assign(m.userData, memberMemo[pkey]); m.resolved=true; return Promise.resolve(m); }
-
+    if(window.HNK && HNK.ready){
+      return HNK.ready().then(function(dir){
+        var d = dir ? HNK.get(m.pseudo) : null;
+        return d ? applyDir(m, d) : resolveMemberOld(m);
+      }, function(){ return resolveMemberOld(m); });
+    }
+    return resolveMemberOld(m);
+  }
+  /* Ancienne resolution 1-par-1 (repli) : /memberlist?username= + cache 24h. */
+  function resolveMemberOld(m){
+    var pkey = m.pseudo.toLowerCase();
     var cache = Cache.get('member-'+pkey, CONFIG.MEMBER_TTL);
     if(cache){ Object.assign(m.userData, cache.data); m.resolved=true; memberMemo[pkey]=cache.data;
-      if(!cache._stale) return Promise.resolve(m); /* sinon refresh silencieux ci-dessous */ }
-
+      if(!cache._stale) return Promise.resolve(m); }
     var url = '/memberlist?username=' + encodeURIComponent(m.pseudo);
     return Net.fetch(url).then(function(html){
       if(html){

@@ -179,19 +179,29 @@
      ========================================================================= */
   var META_KEYS = { type:1, couleur:1, color:1, embleme:1, emblem:1, kanji:1, desc:1, description:1, slug:1 };
 
+  /* lit le texte d'un noeud en convertissant <br> et blocs en vrais sauts de
+     ligne. INDISPENSABLE : dans un document fetch+DOMParser (non rendu),
+     innerText ne restitue pas les retours ligne -> on normalise à la main. */
+  function nodeText(node){
+    if(!node) return '';
+    var od = node.ownerDocument || document;
+    var c = node.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll('br'), function(br){
+      if(br.parentNode) br.parentNode.replaceChild(od.createTextNode('\n'), br);
+    });
+    Array.prototype.forEach.call(c.querySelectorAll('p,div,li,dd,tr'), function(b){
+      b.appendChild(od.createTextNode('\n'));
+    });
+    return c.textContent || '';
+  }
+
   function extractDataText(doc){
-    /* 1) priorité : premier bloc de code (rendu propre, pas de <br> mangling) */
-    var code = doc.querySelector('.codebox dd, .codebox code, dl.codebox, pre, code.codebox, .code');
-    if(code && clean(code.textContent).length > 4){
-      return code.innerText || code.textContent;
-    }
-    /* 2) fallback : corps du 1er message, <br> -> \n */
-    var post = doc.querySelector('.post .content, .postbody .content, .post-entry, .entry-content, .postbody, .hnk-post .content, .post');
-    if(!post) return '';
-    var clone = post.cloneNode(true);
-    Array.prototype.forEach.call(clone.querySelectorAll('br'), function(br){ br.replaceWith('\n'); });
-    Array.prototype.forEach.call(clone.querySelectorAll('div,p,li'), function(b){ b.appendChild(document.createTextNode('\n')); });
-    return clone.textContent || '';
+    /* 1) priorité : premier bloc de code du 1er message */
+    var code = doc.querySelector('.hnk-post-content dl.codebox dd, .hnk-post-content .codebox dd, dl.codebox dd, .codebox dd, .codebox code, pre, code.codebox, .code');
+    if(code && clean(code.textContent).length > 4) return nodeText(code);
+    /* 2) fallback : corps du 1er message (conteneur réel du thème) */
+    var post = doc.querySelector('.hnk-post-content, .post .content, .postbody .content, .post-entry, .entry-content, .postbody, .hnk-post .content, .post');
+    return nodeText(post);
   }
 
   function parseClans(text){
@@ -615,9 +625,12 @@
      9. ORCHESTRATION
      ========================================================================= */
   function findRoot(){
+    /* INDEX_ONLY gate d'abord : l'ancre choisit seulement OÙ s'affiche le
+       composant, pas SUR QUELLE page. Ainsi l'ancre peut vivre dans le footer
+       global tout en n'affichant le registre que sur l'accueil. */
+    if(CONFIG.INDEX_ONLY && !isIndex()) return null;
     var anchor=document.querySelector(CONFIG.ANCHOR_SELECTOR);
     if(anchor) return anchor;
-    if(CONFIG.INDEX_ONLY && !isIndex()) return null;
     var footer=document.querySelector(CONFIG.FOOTER_SELECTOR);
     if(footer){ var root=el('div'); root.id='hnk-clans-root'; footer.parentNode.insertBefore(root, footer); return root; }
     return null;
@@ -645,9 +658,14 @@
     }
 
     Net.fetch('/t'+CONFIG.TOPIC_ID+'-a').then(function(html){
-      if(!html){ if(!topicCache) showError(root); return; }
-      var clans=parseClans(extractDataText(parseHTML(html)));
-      if(!clans.length){ if(!topicCache) showError(root); return; }
+      if(!html){ console.warn('[HNKClans] fetch vide pour /t'+CONFIG.TOPIC_ID+' (sujet introuvable, privé, ou non accessible au visiteur).'); if(!topicCache) showError(root); return; }
+      var text=extractDataText(parseHTML(html));
+      var clans=parseClans(text);
+      if(!clans.length){
+        console.warn('[HNKClans] aucun clan parsé. Texte extrait ('+text.length+' car.) :\n'+text.slice(0,300));
+        console.warn('[HNKClans] -> vérifie que les données sont dans un bloc [code] du 1er message et que des lignes [NomDeClan] existent.');
+        if(!topicCache) showError(root); return;
+      }
       Cache.set('topic', { clans: dehydrate(clans) });
       render(root, clans, computeStats(clans));
     });

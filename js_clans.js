@@ -216,6 +216,7 @@
       var line = clean(raw);
       if(!line) continue;
       if(line.charAt(0)===';' || line.indexOf('//')===0) continue; // commentaire
+      if(/^[^0-9A-Za-zÀ-ÿ\u3040-\u30ff\u4e00-\u9fff]+$/.test(line)) continue; // ligne décorative (==== ---- ~~~)
 
       var mHead = line.match(/^\[\s*(.+?)\s*\]$/);                 // [Nom de clan]
       if(mHead){
@@ -423,10 +424,8 @@
     /* aperçu membres : avatars empilés + reste */
     var roster=el('div','hnkc-roster');
     var avas=el('div','hnkc-mems');
-    var shown=clan.members.slice(0, CONFIG.MAX_AVATARS);
+    var shown=clan.members;
     shown.forEach(function(m){ avas.appendChild(memberChip(m)); });
-    var rest=clan.members.length - shown.length;
-    if(rest>0) avas.appendChild(el('span','hnkc-more','+'+rest+' autre'+(rest>1?'s':'')));
     roster.appendChild(avas);
     card.appendChild(roster);
 
@@ -728,6 +727,7 @@
      ========================================================================= */
   var CSS = [
 '.hnkc *{box-sizing:border-box}',
+'.hnkc h2,.hnkc h3,.hnkc h4,.hnkc p{border:0 !important;outline:0 !important;background:none !important;box-shadow:none !important;text-decoration:none !important}',
 '.hnkc{--ember:var(--ember,#FF5722);--ember-hot:var(--ember-hot,#FF7A4D);',
 '  --ui:var(--ui,"Inter",system-ui,sans-serif);--display:var(--display,"Anton",Impact,sans-serif);--jp:var(--jp,"Noto Serif JP",serif);',
 '  --bone:var(--bone,#EDE7DA);--smoke:var(--smoke,#8A8F99);--white:var(--white,#fff);',
@@ -742,8 +742,8 @@
 '.hnkc-side .jp{writing-mode:vertical-rl;font-family:var(--jp);font-size:20px;letter-spacing:.32em;color:rgba(255,87,34,.5);text-shadow:0 0 12px rgba(255,87,34,.35)}',
 /* en-tête centré */
 '.hnkc-head{margin-bottom:18px;text-align:center}',
-'.hnkc-title{margin:0 0 6px;font:900 22px/1 var(--display);letter-spacing:.28em;text-transform:uppercase;color:var(--white);display:flex;align-items:center;justify-content:center;gap:16px}',
-'.hnkc-title-jp{font-family:var(--jp);font-size:26px;letter-spacing:.18em;font-weight:700;color:var(--ember);text-shadow:0 0 16px rgba(255,87,34,.55)}',
+'.hnkc-title{margin:0 0 7px;font:900 24px/1 var(--display);letter-spacing:.3em;text-transform:uppercase;color:var(--white);display:flex;align-items:center;justify-content:center;gap:18px;text-shadow:0 2px 14px rgba(0,0,0,.6)}',
+'.hnkc-title-jp{font-family:var(--jp);font-size:31px;letter-spacing:.16em;font-weight:700;color:var(--ember);text-shadow:0 0 18px rgba(255,87,34,.6),0 0 2px rgba(255,87,34,.5)}',
 '.hnkc-sub{margin:0 auto 18px;max-width:560px;color:var(--smoke);font:400 11.5px/1.6 var(--ui);letter-spacing:.04em}',
 /* stats globales */
 '.hnkc-stats{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0 12px}',
@@ -778,10 +778,10 @@
 '.hnkc-track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 2px 18px;scrollbar-width:none;-ms-overflow-style:none;cursor:grab}',
 '.hnkc-track::-webkit-scrollbar{display:none}',
 '.hnkc-track.is-drag{cursor:grabbing;scroll-snap-type:none}',
-'.hnkc-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:42px;height:42px;border:1px solid rgba(255,87,34,.42);',
-'  background:rgba(7,8,10,.9);color:var(--ember);font:400 24px/1 var(--display);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.18s;',
+'.hnkc .hnkc-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:42px;height:42px;border:1px solid rgba(255,87,34,.6) !important;',
+'  background:rgba(7,8,10,.92) !important;color:var(--ember) !important;font:400 24px/1 var(--display) !important;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.18s;text-shadow:0 0 10px rgba(255,87,34,.5);',
 '  clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}',
-'.hnkc-nav:hover{border-color:var(--ember);color:var(--white);box-shadow:0 0 18px rgba(255,87,34,.45)}',
+'.hnkc .hnkc-nav:hover{border-color:var(--ember) !important;color:var(--white) !important;background:rgba(255,87,34,.18) !important;box-shadow:0 0 18px rgba(255,87,34,.5)}',
 '.hnkc-prev{left:-10px}.hnkc-next{right:-10px}',
 '.hnkc-nav.is-off{opacity:0;pointer-events:none}',
 /* carte (DA VIE DU FORUM : coins biseautés, bordure ember, blason+kanji) */
@@ -807,7 +807,10 @@
 '.hnkc-desc{margin:9px 0 0;font:400 12px/1.55 var(--ui);color:rgba(255,255,255,.7);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}',
 /* roster */
 '.hnkc-roster{position:relative;z-index:2;margin-top:16px}',
-'.hnkc-mems{display:flex;flex-wrap:wrap;gap:6px}',
+'.hnkc-mems{display:flex;flex-direction:column;align-items:flex-start;gap:5px;max-height:92px;overflow-y:auto;padding-right:5px;scrollbar-width:thin;scrollbar-color:rgba(255,87,34,.45) transparent}',
+'.hnkc-mems::-webkit-scrollbar{width:5px}',
+'.hnkc-mems::-webkit-scrollbar-thumb{background:rgba(255,87,34,.45);border-radius:3px}',
+'.hnkc-mems::-webkit-scrollbar-track{background:transparent}',
 '.hnkc-mem{--c:var(--clan);display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:3px 10px 3px 3px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:30px;text-decoration:none;transition:border-color .2s,background .2s,transform .2s}',
 '.hnkc-mem:hover{border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);transform:translateY(-1px)}',
 '.hnkc-mem[data-pending]{opacity:.5}',

@@ -167,8 +167,17 @@ window.__hnkProfileHtml=window.__hnkProfileHtml||(function(){var mem=Object.crea
       if (c) fillCard(card, c);
       if (!c) { queue.push(function () { return fetchCard(card, url); }); pump(); }
     }
-    /* Plus d'IntersectionObserver - enrichissement immediat. */
-    Array.prototype.forEach.call(cards, enrich);
+    /* LAZY anti-scraper : on ne fetch le profil d'une carte (clan/fond/liens) que lorsqu'elle
+       entre a l'ecran. Pseudo/avatar/couleur restent natifs (instantanes). Les membres hors
+       ecran ne sont jamais fetches -> plus de balayage de tous les profils au chargement. */
+    if('IntersectionObserver' in window){
+      var _io=new IntersectionObserver(function(entries){
+        for(var i=0;i<entries.length;i++){if(entries[i].isIntersecting){_io.unobserve(entries[i].target);enrich(entries[i].target);}}
+      },{rootMargin:'250px 0px'});
+      Array.prototype.forEach.call(cards,function(c){_io.observe(c);});
+    } else {
+      Array.prototype.forEach.call(cards,enrich);
+    }
   }
 
   function run() { doProfile(); doPosts(); doMembers(); }

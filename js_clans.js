@@ -52,7 +52,7 @@
 
     CACHE_TTL: 12 * 60 * 60 * 1000,   // 12 h
     MEMBER_TTL: 24 * 60 * 60 * 1000,  // 24 h (résolution pseudo -> profil)
-    MAX_PARALLEL: 5,                  // requêtes simultanées (anti-rafale serveur)
+    MAX_PARALLEL: 2,                  // requêtes simultanées (anti-rafale serveur)
     MAX_AVATARS: 5,                   // avatars visibles par carte
     EAGER: true,                      // true = tout charge tout de suite (pas de lazy au scroll)
     VERSION: 'v2'   // bump = purge des anciens caches chez tous les visiteurs
@@ -142,7 +142,7 @@
       var self=this;
       return new Promise(function(resolve){
         self.q.push(function(){
-          return fetch(url, {credentials:'same-origin', cache:'no-store', redirect:'follow'})
+          return fetch(url, {credentials:'same-origin', cache:'default', redirect:'follow'})
             .then(function(r){ return r.text(); })
             .then(function(t){ resolve(t); }, function(){ resolve(''); });
         });

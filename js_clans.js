@@ -659,6 +659,10 @@
 
     Net.fetch('/t'+CONFIG.TOPIC_ID+'-a').then(function(html){
       if(!html){ console.warn('[HNKClans] fetch vide pour /t'+CONFIG.TOPIC_ID+' (sujet introuvable, privé, ou non accessible au visiteur).'); if(!topicCache) showError(root); return; }
+      if(/mode=sendpassword|name=\"password\"|Veuillez entrer votre nom/.test(html)){
+        console.warn('[HNKClans] /t'+CONFIG.TOPIC_ID+' a renvoyé la page de CONNEXION : ce visiteur n\'a pas le droit de lire le sujet. Ouvre la lecture du forum aux Invités/au groupe concerné.');
+        if(!topicCache) showError(root); return;
+      }
       var text=extractDataText(parseHTML(html));
       var clans=parseClans(text);
       if(!clans.length){
@@ -686,9 +690,17 @@
   }
 
   function showError(root){
-    var sec=el('section','hnkc'); sec.setAttribute('data-hnkc','');
-    sec.innerHTML='<div class="hnkc-wrap"><div class="hnkc-empty">Registre des clans indisponible.<br><small>Vérifie HNKC_CONFIG.TOPIC_ID et le format du sujet.</small></div></div>';
-    root.innerHTML=''; root.appendChild(sec);
+    /* Échec d'accès (sujet non lisible par ce visiteur -> page de login renvoyée)
+       ou mauvaise config : on MASQUE proprement le composant côté visiteur.
+       L'admin garde le diagnostic précis en console (voir start()).
+       Pour forcer l'affichage d'un message de debug : HNKC_CONFIG.DEBUG = true */
+    if(CONFIG.DEBUG){
+      var sec=el('section','hnkc'); sec.setAttribute('data-hnkc','');
+      sec.innerHTML='<div class="hnkc-wrap"><div class="hnkc-empty">Registre des clans indisponible.<br><small>Vérifie HNKC_CONFIG.TOPIC_ID, le format du sujet, et les droits de lecture du sujet.</small></div></div>';
+      root.innerHTML=''; root.appendChild(sec);
+    } else {
+      root.innerHTML='';
+    }
   }
 
   /* =========================================================================

@@ -326,9 +326,9 @@
     var cards = doc.querySelectorAll('.hnk-member[data-hnk-profile], .hnk-member, li.row, .memberlist tr');
     for(var i=0;i<cards.length;i++){
       var c=cards[i];
-      var nm = c.querySelector('.nm, .username, a[href*="/u"]');
-      if(!nm) continue;
-      var name = clean(nm.textContent);
+      var nm = c.querySelector('.nm, .username');         // le pseudo (PAS le lien vide .lnk)
+      var name = clean(nm ? nm.textContent : '');
+      if(!name){ var na=c.querySelector('a[href*="/u"]'); name=clean(na?na.textContent:''); }
       if(!name) continue;
       var link = c.getAttribute('data-hnk-profile') || '';
       if(!link){ var a=c.querySelector('a[href*="/u"]'); link=a?a.getAttribute('href'):''; }

@@ -52,8 +52,9 @@
 
     CACHE_TTL: 12 * 60 * 60 * 1000,   // 12 h
     MEMBER_TTL: 24 * 60 * 60 * 1000,  // 24 h (résolution pseudo -> profil)
-    MAX_PARALLEL: 3,                  // anti-rafale serveur
+    MAX_PARALLEL: 5,                  // requêtes simultanées (anti-rafale serveur)
     MAX_AVATARS: 5,                   // avatars visibles par carte
+    EAGER: true,                      // true = tout charge tout de suite (pas de lazy au scroll)
     VERSION: 'v1'
   };
   /* Permet de surcharger TOPIC_ID depuis l'extérieur :
@@ -620,13 +621,16 @@
         });
       });
     }
-    if('IntersectionObserver' in window){
+    /* EAGER (défaut) : on résout TOUTES les cartes tout de suite (via la file
+       de N requêtes max), avec un léger décalage de fondu. LAZY (EAGER:false) :
+       on attend que la carte entre dans le viewport (IntersectionObserver). */
+    if(CONFIG.EAGER || !('IntersectionObserver' in window)){
+      cards.forEach(function(c,i){ setTimeout(function(){ c.classList.add('is-in'); }, i*60); fill(c); });
+    }else{
       var io=new IntersectionObserver(function(ents){
         ents.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('is-in'); fill(en.target); io.unobserve(en.target); } });
       }, {rootMargin:'120px'});
       cards.forEach(function(c){ io.observe(c); });
-    }else{
-      cards.forEach(function(c){ c.classList.add('is-in'); fill(c); });
     }
   }
 

@@ -19,6 +19,9 @@
    Code autonome (IIFE) : ne touche NI js_feeds NI js_memberlist.
    ============================================================ */
 (function () {
+
+/* ---- Cache + file partagee des fiches profil /uN (anti-scraper FA : mutualise memberlist + liens, 1 seul fetch/profil, concurrence globale 2) ---- */
+window.__hnkProfileHtml=window.__hnkProfileHtml||(function(){var mem=Object.create(null),q=[],active=0,MAX=2,TTL=15*60*1000;function sg(u){try{var r=JSON.parse(sessionStorage.getItem('hnk-pf-'+u)||'null');if(r&&(Date.now()-r._t)<TTL)return r.h;}catch(e){}return null;}function ss(u,h){try{sessionStorage.setItem('hnk-pf-'+u,JSON.stringify({_t:Date.now(),h:h}));}catch(e){}}function pump(){while(active<MAX&&q.length){active++;(q.shift())();}}function fr(u){return new Promise(function(res){q.push(function(){window.fetch(u,{credentials:'same-origin'}).then(function(r){return r.text();}).then(function(h){ss(u,h);active--;pump();res(h);},function(){active--;pump();res('');});});pump();});}return function(u){if(mem[u])return mem[u];var c=sg(u);var p=(c!=null)?Promise.resolve(c):fr(u);mem[u]=p;return p;};})();
   'use strict';
 
   var KJ = { pres: '紹', cb: '帳' };
@@ -74,7 +77,7 @@
     if (!h2 || (h2.parentNode && h2.parentNode.classList.contains('hnk-id-row'))) return;
     var url = location.pathname;
     if (!/^\/u\d+/.test(url)) return;
-    fetch(url, { credentials: 'same-origin' }).then(function (r) { return r.text(); }).then(function (txt) {
+    window.__hnkProfileHtml(url).then(function (txt) {
       var doc = new DOMParser().parseFromString(txt, 'text/html');
       var info = doc.querySelector('.hnk-profile-info');
       var links = info ? extract(info.querySelectorAll('.item'), false) : {};
@@ -142,7 +145,7 @@
   function done() { active--; pump(); }
 
   function fetchCard(card, url) {
-    return fetch(url, { credentials: 'same-origin' }).then(function (r) { return r.text(); }).then(function (txt) {
+    return window.__hnkProfileHtml(url).then(function (txt) {
       var doc = new DOMParser().parseFromString(txt, 'text/html');
       var info = doc.querySelector('.hnk-profile-info');
       var links = info ? extract(info.querySelectorAll('.item'), false) : {};

@@ -55,7 +55,7 @@
     MAX_PARALLEL: 5,                  // requêtes simultanées (anti-rafale serveur)
     MAX_AVATARS: 5,                   // avatars visibles par carte
     EAGER: true,                      // true = tout charge tout de suite (pas de lazy au scroll)
-    VERSION: 'v1'
+    VERSION: 'v2'   // bump = purge des anciens caches chez tous les visiteurs
   };
   /* Permet de surcharger TOPIC_ID depuis l'extérieur :
      window.HNKC_CONFIG = { TOPIC_ID: 42 };  (placé avant le loader) */
@@ -670,10 +670,14 @@
 
     /* cache du sujet pour un affichage quasi-instantané */
     var topicCache=Cache.get('topic', CONFIG.CACHE_TTL);
+    var hadCache=false;
     if(topicCache && topicCache.clans){
       var clansC=hydrate(topicCache.clans);
       render(root, clansC, computeStats(clansC));
-      if(!topicCache._stale) return;  // frais -> stop ; sinon refresh ci-dessous
+      hadCache=true;
+      /* on NE s'arrête PAS : on relit TOUJOURS le sujet en arrière-plan pour
+         refléter les modifs de l'admin dès le prochain chargement (le sujet =
+         1 seule requête, peu coûteuse ; la résolution des membres reste cachée). */
     }
 
     Net.fetch('/t'+CONFIG.TOPIC_ID+'-a').then(function(html){
@@ -689,7 +693,10 @@
         console.warn('[HNKClans] -> vérifie que les données sont dans un bloc [code] du 1er message et que des lignes [NomDeClan] existent.');
         if(!topicCache) showError(root); return;
       }
-      Cache.set('topic', { clans: dehydrate(clans) });
+      var fresh=dehydrate(clans);
+      /* aucun changement depuis le cache -> pas de re-render (évite le flicker) */
+      if(hadCache && topicCache && JSON.stringify(topicCache.clans)===JSON.stringify(fresh)) return;
+      Cache.set('topic', { clans: fresh });
       render(root, clans, computeStats(clans));
     });
   }

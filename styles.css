@@ -1211,7 +1211,7 @@ a{color:inherit;text-decoration:none}
   );
 }
 .hnk-foot-portrait::after{
-  content:"";position:absolute;inset:0;
+  content:"";position:absolute;inset:0;z-index:1;
   background:
     linear-gradient(180deg, transparent 50%, rgba(7,8,10,.7) 100%),
     radial-gradient(circle at 1px 1px, rgba(255,255,255,.025) 1px, transparent 1.4px);
@@ -1220,12 +1220,11 @@ a{color:inherit;text-decoration:none}
 .hnk-foot-portrait .lbl{
   position:absolute;left:14px;bottom:14px;z-index:2;
   font:700 9px/1 var(--ui);letter-spacing:.36em;text-transform:uppercase;
-  color:rgba(255,255,255,.55);
+  color:rgba(255,255,255,.8);text-shadow:0 1px 6px rgba(0,0,0,.9), 0 0 2px rgba(0,0,0,.8);
 }
 /* Image de portrait : remplit le cadre en "cover", sous le label.
    Quand un src est renseigné, le label « [ Portrait … ] » disparaît tout seul. */
-.hnk-portrait-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.hnk-foot-portrait:has(.hnk-portrait-img[src]:not([src=""])) .lbl{display:none}
+.hnk-portrait-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 
 .hnk-foot-col h4{
   margin:0 0 14px;font:900 16px/1 var(--display);letter-spacing:.34em;text-transform:uppercase;

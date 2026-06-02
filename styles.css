@@ -1198,7 +1198,7 @@ a{color:inherit;text-decoration:none}
   display:grid;grid-template-columns:180px 1fr 1fr 180px;gap:24px;
 }
 .hnk-foot-portrait{
-  height:320px;position:relative;
+  min-height:320px;align-self:stretch;position:relative;
   background:
     radial-gradient(ellipse at 50% 30%, #2A1A1A, #050608);
   background-size:cover;background-position:center;
@@ -1244,6 +1244,14 @@ a{color:inherit;text-decoration:none}
 }
 .hnk-foot-col .staff .nm{font:700 9px/1.3 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--bone)}
 .hnk-foot-col .staff .rl{font:700 8px/1.2 var(--ui);letter-spacing:.28em;text-transform:uppercase;color:var(--ember);margin-top:2px}
+
+/* ============================================================
+   FOOTER : visible uniquement sur l'accueil.
+   Le marqueur .hnk-on-index n'existe que dans index_body (donc que
+   sur l'index). :not(:has()) -> si :has() non supporté, la règle est
+   ignorée et le footer reste visible partout (dégradation sûre).
+   ============================================================ */
+html:not(:has(.hnk-on-index)) .hnk-footer{display:none!important}
 
 /* ============================================================
    QEEL — 100% NATIF, ZÉRO JS.
@@ -1292,14 +1300,23 @@ a{color:inherit;text-decoration:none}
 
 /* listes : on masque préfixe + virgules, chaque membre devient un chip
    (la couleur de groupe native sur le <span> est conservée) */
-.hnk-qeel .hnk-userlist{font-size:0!important;line-height:0!important}
+.hnk-qeel .hnk-userlist{
+  font-size:0!important;line-height:0!important;
+  max-height:92px;overflow-y:auto;overflow-x:hidden;padding-right:5px;
+  scrollbar-width:thin;scrollbar-color:rgba(255,87,34,.45) transparent;
+}
+.hnk-qeel .hnk-userlist::-webkit-scrollbar{width:6px}
+.hnk-qeel .hnk-userlist::-webkit-scrollbar-track{background:rgba(255,255,255,.04);border-radius:3px}
+.hnk-qeel .hnk-userlist::-webkit-scrollbar-thumb{background:rgba(255,87,34,.4);border-radius:3px}
+.hnk-qeel .hnk-userlist::-webkit-scrollbar-thumb:hover{background:rgba(255,87,34,.7)}
 .hnk-qeel .hnk-userlist a{
   display:inline-block;margin:0 6px 6px 0;padding:3px 10px;vertical-align:top;
+  max-width:100%;box-sizing:border-box;
   background:rgba(255,255,255,.03);border:1px solid rgba(255,87,34,.16);
   text-decoration:none;transition:border-color .15s, background .15s;
   clip-path:polygon(0 4px,4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%);
 }
-.hnk-qeel .hnk-userlist a span,.hnk-qeel .hnk-userlist a strong{font:700 10.5px/1.35 var(--ui)!important;letter-spacing:.04em!important;text-transform:none!important}
+.hnk-qeel .hnk-userlist a span,.hnk-qeel .hnk-userlist a strong{font:700 10.5px/1.35 var(--ui)!important;letter-spacing:.04em!important;text-transform:none!important;overflow-wrap:anywhere;word-break:break-word}
 .hnk-qeel .hnk-userlist a:hover{border-color:var(--ember);background:rgba(255,87,34,.12)}
 
 /* dernière recrue : phrase masquée, on garde le pseudo (<a>) */
@@ -1313,6 +1330,11 @@ a{color:inherit;text-decoration:none}
 .hnk-qeel .hnk-newest-native a:hover span,.hnk-qeel .hnk-newest-native a:hover strong{color:var(--ember)!important}
 
 .hnk-qeel-quote{margin:0;font-style:italic;font-size:12px;color:var(--smoke)}
+
+/* Bloc "Dernière recrue + citation" déplacé en bas de la colonne Bienvenue */
+.hnk-foot-welcome{display:flex;flex-direction:column}
+.hnk-welcome-foot{margin-top:auto;padding-top:20px}
+.hnk-welcome-foot .hnk-qeel-newest{margin:0 0 8px}
 
 .hnk-foot-meta{
   position:relative;

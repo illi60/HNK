@@ -1222,6 +1222,10 @@ a{color:inherit;text-decoration:none}
   font:700 9px/1 var(--ui);letter-spacing:.36em;text-transform:uppercase;
   color:rgba(255,255,255,.55);
 }
+/* Image de portrait : remplit le cadre en "cover", sous le label.
+   Quand un src est renseigné, le label « [ Portrait … ] » disparaît tout seul. */
+.hnk-portrait-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.hnk-foot-portrait:has(.hnk-portrait-img[src]:not([src=""])) .lbl{display:none}
 .hnk-foot-col h4{
   margin:0 0 14px;font:900 16px/1 var(--display);letter-spacing:.34em;text-transform:uppercase;
   color:var(--white);padding-bottom:12px;
@@ -1244,6 +1248,98 @@ a{color:inherit;text-decoration:none}
 }
 .hnk-foot-col .staff .nm{font:700 9px/1.3 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--bone)}
 .hnk-foot-col .staff .rl{font:700 8px/1.2 var(--ui);letter-spacing:.28em;text-transform:uppercase;color:var(--ember);margin-top:2px}
+
+/* ============================================================
+   STAFF — cartes (format memberlist adapté, compact)
+   Ajout facile : dupliquer un <a class="hnk-staff-card"> dans le template.
+   ============================================================ */
+.hnk-staff{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.hnk-staff-card{
+  --clan:var(--ember,#FF5722);
+  position:relative;display:block;overflow:hidden;isolation:isolate;
+  width:128px;min-height:148px;text-decoration:none;
+  border:1px solid rgba(255,255,255,.08);border-radius:12px;
+  background:linear-gradient(180deg,#14171C,#0E1116);
+  transition:transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.hnk-staff-card:hover{
+  transform:translateY(-3px);
+  border-color:color-mix(in srgb, var(--clan) 55%, transparent);
+  box-shadow:0 14px 30px rgba(0,0,0,.5), 0 0 20px color-mix(in srgb, var(--clan) 22%, transparent);
+}
+.hnk-staff-card .bg{
+  position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;
+  background-color:#12151A;
+  background-image:radial-gradient(120% 90% at 70% 0%, color-mix(in srgb, var(--clan) 18%, transparent), transparent 60%);
+  filter:brightness(.64) saturate(.92);
+}
+.hnk-staff-card .bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg, rgba(8,9,12,.12) 0%, rgba(8,9,12,.5) 46%, #0A0C10 100%);
+}
+.hnk-staff-card .av{
+  position:absolute;left:50%;top:16px;transform:translateX(-50%);z-index:2;
+  width:54px;height:54px;border-radius:50%;overflow:hidden;background:#14171C;
+  box-shadow:0 0 0 2px var(--clan), 0 6px 16px rgba(0,0,0,.55);
+}
+.hnk-staff-card .av img{width:100%;height:100%;object-fit:cover;display:block}
+.hnk-staff-card .meta{position:absolute;left:0;right:0;bottom:12px;z-index:2;text-align:center;padding:0 8px}
+.hnk-staff-card .nm{display:block;font:800 12px/1.15 var(--display);letter-spacing:.05em;text-transform:uppercase;color:var(--white);text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.hnk-staff-card .rl{
+  display:inline-block;margin-top:6px;font:700 8px/1 var(--ui);letter-spacing:.22em;
+  text-transform:uppercase;color:var(--clan);
+  border:1px solid color-mix(in srgb, var(--clan) 40%, transparent);
+  background:rgba(9,11,15,.5);padding:3px 7px;border-radius:4px;
+}
+
+/* ============================================================
+   MVP — joueur du mois (carte mise en avant)
+   ============================================================ */
+.hnk-mvp-wrap{margin-top:22px}
+.hnk-mvp-eyebrow{
+  display:inline-block;margin:0 0 9px;font:700 9px/1 var(--ui);letter-spacing:.34em;
+  text-transform:uppercase;color:var(--ember);
+}
+.hnk-mvp{
+  --clan:var(--ember-hot,#FF8A4C);
+  position:relative;display:block;overflow:hidden;isolation:isolate;min-height:124px;
+  text-decoration:none;border-radius:14px;
+  border:1px solid color-mix(in srgb, var(--clan) 50%, rgba(255,255,255,.08));
+  background:linear-gradient(180deg,#1A130E,#0E1116);
+  box-shadow:0 0 0 1px color-mix(in srgb, var(--clan) 14%, transparent), 0 14px 34px rgba(0,0,0,.5), 0 0 28px color-mix(in srgb, var(--clan) 18%, transparent);
+  transition:transform .22s ease, box-shadow .22s ease;
+}
+.hnk-mvp:hover{transform:translateY(-3px);box-shadow:0 0 0 1px var(--clan), 0 18px 42px rgba(0,0,0,.55), 0 0 42px color-mix(in srgb, var(--clan) 30%, transparent)}
+.hnk-mvp .bg{
+  position:absolute;inset:0;z-index:0;background-size:cover;background-position:center;
+  background-color:#16120F;
+  background-image:radial-gradient(120% 120% at 88% 0%, color-mix(in srgb, var(--clan) 26%, transparent), transparent 58%);
+  filter:brightness(.66);
+}
+.hnk-mvp .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg, #0B0D11 6%, rgba(11,13,17,.62) 48%, rgba(11,13,17,.18) 100%)}
+.hnk-mvp::before{
+  content:"";position:absolute;left:0;right:0;top:0;height:2px;z-index:3;
+  background:linear-gradient(90deg, transparent, var(--clan), #FFFFFF 50%, var(--clan), transparent);
+  background-size:200% 100%;animation:hnk-mvp-shine 3.5s linear infinite;
+}
+@keyframes hnk-mvp-shine{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.hnk-mvp-tag{
+  position:absolute;left:14px;top:14px;z-index:3;display:inline-flex;align-items:center;gap:5px;
+  font:900 12px/1 var(--display);letter-spacing:.18em;color:#0A0C10;
+  background:linear-gradient(180deg, var(--ember-hot,#FF8A4C), var(--clan));
+  padding:6px 11px;border-radius:6px;box-shadow:0 4px 14px color-mix(in srgb, var(--clan) 45%, transparent);
+}
+.hnk-mvp-tag .star{font-size:12px;line-height:1}
+.hnk-mvp .av{
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);z-index:2;
+  width:76px;height:76px;border-radius:50%;overflow:hidden;background:#16120F;
+  box-shadow:0 0 0 2px var(--clan), 0 8px 22px rgba(0,0,0,.6);
+}
+.hnk-mvp .av img{width:100%;height:100%;object-fit:cover;display:block}
+.hnk-mvp .info{position:absolute;left:16px;right:108px;bottom:14px;z-index:2}
+.hnk-mvp .info .lbl{display:block;font:700 8.5px/1.2 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--ember-hot,#FF8A4C)}
+.hnk-mvp .info .nm{display:block;margin:5px 0 4px;font:900 22px/1 var(--display);letter-spacing:.03em;text-transform:uppercase;color:var(--white);text-shadow:0 2px 12px rgba(0,0,0,.8)}
+.hnk-mvp .info .why{display:block;font:italic 400 11px/1.4 var(--ui);color:var(--smoke)}
 
 /* ============================================================
    FOOTER : visible uniquement sur l'accueil.

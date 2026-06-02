@@ -1245,6 +1245,75 @@ a{color:inherit;text-decoration:none}
 .hnk-foot-col .staff .nm{font:700 9px/1.3 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--bone)}
 .hnk-foot-col .staff .rl{font:700 8px/1.2 var(--ui);letter-spacing:.28em;text-transform:uppercase;color:var(--ember);margin-top:2px}
 
+/* ============================================================
+   QEEL — 100% NATIF, ZÉRO JS.
+   Forumactif sort des PHRASES dont seul le chiffre/pseudo est dans
+   un <strong> (ou <a>). On masque la phrase entière (font-size:0)
+   et on ré-affiche uniquement l'élément utile. Markup confirmé en
+   live : {TOTAL_POSTS}="…<strong>73</strong> messages", etc.
+   ============================================================ */
+.hnk-qeel-counts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 20px}
+.hnk-stat{
+  position:relative;padding:15px 16px 13px;
+  background:linear-gradient(180deg, rgba(255,87,34,.09), rgba(255,87,34,.015));
+  border:1px solid rgba(255,87,34,.20);
+  clip-path:polygon(0 7px,7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%);
+}
+.hnk-stat::before{
+  content:"";position:absolute;left:0;top:0;width:26px;height:2px;
+  background:var(--ember);box-shadow:0 0 10px var(--ember);
+}
+/* masque la phrase -> ne garde que le nombre (<strong>).
+   Scopé sous .hnk-qeel + !important : gagne même si un vieux cache
+   CDN sert encore une règle .hnk-stat span plus spécifique. */
+.hnk-qeel .hnk-stat-native{display:block!important;font-size:0!important;line-height:0!important;color:transparent!important;letter-spacing:0!important;text-transform:none!important}
+.hnk-qeel .hnk-stat-native strong{
+  font:900 34px/1 var(--display)!important;color:var(--white)!important;letter-spacing:.01em!important;
+  text-transform:none!important;text-shadow:0 0 18px rgba(255,87,34,.4);
+}
+.hnk-qeel .hnk-stat-lbl{
+  display:block!important;margin-top:7px;font:700 9px/1 var(--ui)!important;letter-spacing:.34em!important;
+  text-transform:uppercase!important;color:var(--ember)!important;
+}
+
+.hnk-qeel-live{display:grid;gap:17px;margin:0 0 17px}
+.hnk-qeel-block h5{
+  margin:0 0 10px;font:700 10px/1 var(--ui);letter-spacing:.28em;text-transform:uppercase;
+  color:var(--bone);display:flex;align-items:center;gap:7px;
+}
+.hnk-onl-dot{
+  width:6px;height:6px;border-radius:50%;background:#3ddc84;
+  box-shadow:0 0 8px #3ddc84;animation:hnk-onl-pulse 2s infinite;
+}
+@keyframes hnk-onl-pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* compteur "en ligne" natif : juste le 1er nombre de la phrase */
+.hnk-qeel .hnk-onl-native{display:inline!important;font-size:0!important;line-height:0!important;color:transparent!important;letter-spacing:0!important}
+.hnk-qeel .hnk-onl-native strong{font:800 11px/1 var(--ui)!important;color:var(--ember)!important}
+
+/* listes : on masque préfixe + virgules, chaque membre devient un chip
+   (la couleur de groupe native sur le <span> est conservée) */
+.hnk-qeel .hnk-userlist{font-size:0!important;line-height:0!important}
+.hnk-qeel .hnk-userlist a{
+  display:inline-block;margin:0 6px 6px 0;padding:3px 10px;vertical-align:top;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,87,34,.16);
+  text-decoration:none;transition:border-color .15s, background .15s;
+  clip-path:polygon(0 4px,4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%);
+}
+.hnk-qeel .hnk-userlist a span,.hnk-qeel .hnk-userlist a strong{font:700 10.5px/1.35 var(--ui)!important;letter-spacing:.04em!important;text-transform:none!important}
+.hnk-qeel .hnk-userlist a:hover{border-color:var(--ember);background:rgba(255,87,34,.12)}
+
+/* dernière recrue : phrase masquée, on garde le pseudo (<a>) */
+.hnk-qeel-newest{margin:0 0 15px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.hnk-newest-lab{
+  font:700 9px/1 var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--ember);
+}
+.hnk-qeel .hnk-newest-native{font-size:0!important;line-height:0!important;color:transparent!important;letter-spacing:0!important}
+.hnk-qeel .hnk-newest-native a{text-decoration:none}
+.hnk-qeel .hnk-newest-native a span,.hnk-qeel .hnk-newest-native a strong{font:600 12px/1 var(--ui)!important;color:var(--bone)!important;text-transform:none!important}
+.hnk-qeel .hnk-newest-native a:hover span,.hnk-qeel .hnk-newest-native a:hover strong{color:var(--ember)!important}
+
+.hnk-qeel-quote{margin:0;font-style:italic;font-size:12px;color:var(--smoke)}
+
 .hnk-foot-meta{
   position:relative;
   margin-top:22px;padding-top:16px;
@@ -2700,3 +2769,40 @@ body.hnk-body form[name="form_login"] .panel{margin-bottom:0 !important}
 body.hnk-body .panel:has(a.button2[href="/register"]){max-width:560px !important;margin:10px auto 24px !important}
 
 /* ===== Fin AUTH & SYSTEME ===== */
+/* === UCP tabs (onglets profil) — global pour couvrir aussi /search (Sujets surveilles, Favoris) === */
+body.hnk-body #tabs{margin:6px 0 18px!important;padding:0!important}
+body.hnk-body #tabs>ul{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+body.hnk-body #tabs>ul>li{margin:0!important;padding:0!important}
+body.hnk-body #tabs>ul>li>a{display:inline-block;padding:9px 12px;background:#0D1015;border:1px solid rgba(255,255,255,.12);text-decoration:none;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);transition:border-color .15s,box-shadow .15s,color .15s}
+body.hnk-body #tabs>ul>li>a>span{font:700 10px/1 var(--ui,'Inter',sans-serif);letter-spacing:.12em;text-transform:uppercase;color:var(--smoke,#6C7079)}
+body.hnk-body #tabs>ul>li>a:hover{border-color:rgba(255,87,34,.55);box-shadow:0 0 14px rgba(255,87,34,.2)}
+body.hnk-body #tabs>ul>li.activetab>a{background:linear-gradient(180deg,rgba(255,87,34,.25),rgba(255,87,34,.1));border-color:rgba(255,87,34,.65);box-shadow:0 0 16px rgba(255,87,34,.28)}
+body.hnk-body #tabs>ul>li.activetab>a>span{color:var(--white,#F5F1EA)}
+@media(max-width:680px){body.hnk-body #tabs>ul{gap:6px}body.hnk-body #tabs>ul>li>a{padding:8px 10px}}
+
+/* === Liste resultats UCP (Sujets surveilles / Favoris) — table native table1 thematisee === */
+body.hnk-body #cp-main .panel{background:#0E1116!important;border:1px solid rgba(255,87,34,.2)!important;box-shadow:0 10px 26px rgba(0,0,0,.45)!important;padding:0!important;border-radius:0!important;overflow:hidden}
+body.hnk-body #cp-main .panel>.inner{padding:0!important;background:transparent!important}
+body.hnk-body #cp-main table.table1{width:100%!important;border-collapse:collapse!important;table-layout:fixed!important;background:transparent!important;margin:0!important}
+body.hnk-body #cp-main table.table1 th,body.hnk-body #cp-main table.table1 td{border:0!important;vertical-align:middle!important;overflow:hidden}
+body.hnk-body #cp-main table.table1 th{background:#0B0D12!important;border-bottom:1px solid rgba(255,87,34,.28)!important;padding:12px 6px!important;font:800 8.5px/1.25 var(--ui,'Inter',sans-serif)!important;letter-spacing:.05em!important;text-transform:uppercase!important;color:var(--ember,#FF5722)!important;white-space:normal}
+body.hnk-body #cp-main table.table1 tr td{background:#0E1116!important;border-bottom:1px solid rgba(255,255,255,.06)!important;padding:13px 8px!important;color:var(--bone,#DBDEE2)!important;font:500 12px/1.4 var(--ui,'Inter',sans-serif)!important}
+body.hnk-body #cp-main table.table1 tr.row1 td{background:#121519!important}
+body.hnk-body #cp-main table.table1 tr:hover td{background:#1a1410!important}
+body.hnk-body #cp-main table.table1 th:nth-child(1),body.hnk-body #cp-main table.table1 td:nth-child(1){width:38px;text-align:center;padding-left:14px!important}
+body.hnk-body #cp-main table.table1 th:nth-child(2),body.hnk-body #cp-main table.table1 td:nth-child(2){width:34%;text-align:left}
+body.hnk-body #cp-main table.table1 th:nth-child(3),body.hnk-body #cp-main table.table1 td:nth-child(3){width:15%;text-align:left;white-space:normal;word-break:normal}
+body.hnk-body #cp-main table.table1 th:nth-child(4),body.hnk-body #cp-main table.table1 td:nth-child(4){width:11%;text-align:center;white-space:nowrap}
+body.hnk-body #cp-main table.table1 th:nth-child(5),body.hnk-body #cp-main table.table1 td:nth-child(5){width:12%;text-align:center;white-space:nowrap}
+body.hnk-body #cp-main table.table1 th:nth-child(6),body.hnk-body #cp-main table.table1 td:nth-child(6){width:9%;text-align:center;white-space:nowrap}
+body.hnk-body #cp-main table.table1 th:nth-child(7),body.hnk-body #cp-main table.table1 td:nth-child(7){width:17%;text-align:left}
+body.hnk-body #cp-main table.table1 th:nth-child(8),body.hnk-body #cp-main table.table1 td:nth-child(8){width:36px;text-align:center;padding-right:14px!important}
+body.hnk-body #cp-main table.table1 td:nth-child(2) a{font:700 13px/1.4 var(--display,'Oswald',sans-serif)!important;letter-spacing:.03em!important;text-transform:uppercase!important;color:var(--bone,#DBDEE2)!important;text-decoration:none!important}
+body.hnk-body #cp-main table.table1 td:nth-child(2) a:hover{color:var(--ember-hot,#FF8A4C)!important}
+body.hnk-body #cp-main table.table1 td:nth-child(3){color:var(--smoke,#6C7079)!important;font-size:11px!important}
+body.hnk-body #cp-main table.table1 td:nth-child(4),body.hnk-body #cp-main table.table1 td:nth-child(6){color:var(--ember,#FF5722)!important;font-weight:800!important;font-size:13px!important}
+body.hnk-body #cp-main table.table1 td:nth-child(7){color:var(--smoke,#6C7079)!important;font-size:11px!important;line-height:1.5!important}
+body.hnk-body #cp-main table.table1 td:nth-child(7) b{color:var(--bone,#DBDEE2)!important;font-weight:700}
+body.hnk-body #cp-main table.table1 td:nth-child(1) img{opacity:.5;filter:grayscale(.4)}
+body.hnk-body #cp-main table.table1 td:nth-child(8) input{cursor:pointer}
+            

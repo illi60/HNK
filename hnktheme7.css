@@ -1246,49 +1246,72 @@ a{color:inherit;text-decoration:none}
 .hnk-foot-col .staff .rl{font:700 8px/1.2 var(--ui);letter-spacing:.28em;text-transform:uppercase;color:var(--ember);margin-top:2px}
 
 /* ============================================================
-   QEEL hybride : gros compteurs + listes vivantes
+   QEEL — 100% NATIF, ZÉRO JS.
+   Forumactif sort des PHRASES dont seul le chiffre/pseudo est dans
+   un <strong> (ou <a>). On masque la phrase entière (font-size:0)
+   et on ré-affiche uniquement l'élément utile. Markup confirmé en
+   live : {TOTAL_POSTS}="…<strong>73</strong> messages", etc.
    ============================================================ */
-.hnk-qeel-counts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 18px}
+.hnk-qeel-counts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 20px}
 .hnk-stat{
-  position:relative;padding:12px 14px;
-  background:linear-gradient(180deg, rgba(255,87,34,.07), rgba(255,87,34,.01));
+  position:relative;padding:15px 16px 13px;
+  background:linear-gradient(180deg, rgba(255,87,34,.09), rgba(255,87,34,.015));
   border:1px solid rgba(255,87,34,.20);
-  clip-path:polygon(0 6px,6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%);
+  clip-path:polygon(0 7px,7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%);
 }
-.hnk-stat .num{
-  display:block;font:900 30px/1 var(--display);letter-spacing:.02em;color:var(--white);
-  text-shadow:0 0 18px rgba(255,87,34,.35);
+.hnk-stat::before{
+  content:"";position:absolute;left:0;top:0;width:26px;height:2px;
+  background:var(--ember);box-shadow:0 0 10px var(--ember);
 }
-.hnk-stat span{
-  display:block;margin-top:5px;font:700 9px/1 var(--ui);letter-spacing:.32em;
-  text-transform:uppercase;color:var(--ember);
+/* masque la phrase -> ne garde que le nombre (<strong>).
+   Scopé sous .hnk-qeel + !important : gagne même si un vieux cache
+   CDN sert encore une règle .hnk-stat span plus spécifique. */
+.hnk-qeel .hnk-stat-native{display:block!important;font-size:0!important;line-height:0!important;color:transparent!important;letter-spacing:0!important;text-transform:none!important}
+.hnk-qeel .hnk-stat-native strong{
+  font:900 34px/1 var(--display)!important;color:var(--white)!important;letter-spacing:.01em!important;
+  text-transform:none!important;text-shadow:0 0 18px rgba(255,87,34,.4);
+}
+.hnk-qeel .hnk-stat-lbl{
+  display:block!important;margin-top:7px;font:700 9px/1 var(--ui)!important;letter-spacing:.34em!important;
+  text-transform:uppercase!important;color:var(--ember)!important;
 }
 
-.hnk-qeel-live{display:grid;gap:15px;margin:0 0 16px}
+.hnk-qeel-live{display:grid;gap:17px;margin:0 0 17px}
 .hnk-qeel-block h5{
-  margin:0 0 8px;font:700 10px/1 var(--ui);letter-spacing:.28em;text-transform:uppercase;
+  margin:0 0 10px;font:700 10px/1 var(--ui);letter-spacing:.28em;text-transform:uppercase;
   color:var(--bone);display:flex;align-items:center;gap:7px;
 }
 .hnk-onl-dot{
   width:6px;height:6px;border-radius:50%;background:#3ddc84;
   box-shadow:0 0 8px #3ddc84;animation:hnk-onl-pulse 2s infinite;
 }
-@keyframes hnk-onl-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.hnk-onl-count{font:700 10px/1 var(--ui);color:var(--ember);letter-spacing:0}
-.hnk-userlist{font-size:11px;line-height:1.75;color:var(--smoke);word-break:break-word}
-.hnk-userlist a{
-  color:var(--bone);text-decoration:none;border-bottom:1px solid transparent;transition:.15s;
-}
-.hnk-userlist a:hover{color:var(--ember);border-color:rgba(255,87,34,.5)}
-.hnk-userlist .hnk-empty{color:var(--ash);font-style:italic}
+@keyframes hnk-onl-pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* compteur "en ligne" natif : juste le 1er nombre de la phrase */
+.hnk-qeel .hnk-onl-native{display:inline!important;font-size:0!important;line-height:0!important;color:transparent!important;letter-spacing:0!important}
+.hnk-qeel .hnk-onl-native strong{font:800 11px/1 var(--ui)!important;color:var(--ember)!important}
 
-.hnk-qeel-newest{margin:0 0 5px;font-size:11px;color:var(--smoke)}
-.hnk-qeel-newest .hnk-newest-lab{
-  color:var(--ember);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:9px;
+/* listes : on masque préfixe + virgules, chaque membre devient un chip
+   (la couleur de groupe native sur le <span> est conservée) */
+.hnk-qeel .hnk-userlist{font-size:0!important;line-height:0!important}
+.hnk-qeel .hnk-userlist a{
+  display:inline-block;margin:0 6px 6px 0;padding:3px 10px;vertical-align:top;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,87,34,.16);
+  text-decoration:none;transition:border-color .15s, background .15s;
+  clip-path:polygon(0 4px,4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%);
 }
-.hnk-qeel-newest a{color:var(--bone);text-decoration:none}
-.hnk-qeel-newest a:hover{color:var(--ember)}
-.hnk-qeel-record{margin:0 0 12px;font-size:10px;color:var(--ash);line-height:1.5}
+.hnk-qeel .hnk-userlist a span,.hnk-qeel .hnk-userlist a strong{font:700 10.5px/1.35 var(--ui)!important;letter-spacing:.04em!important;text-transform:none!important}
+.hnk-qeel .hnk-userlist a:hover{border-color:var(--ember);background:rgba(255,87,34,.12)}
+
+/* dernière recrue : phrase masquée, on garde le pseudo (<a>) */
+.hnk-qeel-newest{margin:0 0 15px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.hnk-newest-lab{
+  font:700 9px/1 var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--ember);
+}
+.hnk-qeel .hnk-newest-native{font-size:0!important;line-height:0!important;color:transparent!important;letter-spacing:0!important}
+.hnk-qeel .hnk-newest-native a{text-decoration:none}
+.hnk-qeel .hnk-newest-native a span,.hnk-qeel .hnk-newest-native a strong{font:600 12px/1 var(--ui)!important;color:var(--bone)!important;text-transform:none!important}
+.hnk-qeel .hnk-newest-native a:hover span,.hnk-qeel .hnk-newest-native a:hover strong{color:var(--ember)!important}
+
 .hnk-qeel-quote{margin:0;font-style:italic;font-size:12px;color:var(--smoke)}
 
 .hnk-foot-meta{

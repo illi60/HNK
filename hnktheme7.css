@@ -1245,6 +1245,52 @@ a{color:inherit;text-decoration:none}
 .hnk-foot-col .staff .nm{font:700 9px/1.3 var(--ui);letter-spacing:.2em;text-transform:uppercase;color:var(--bone)}
 .hnk-foot-col .staff .rl{font:700 8px/1.2 var(--ui);letter-spacing:.28em;text-transform:uppercase;color:var(--ember);margin-top:2px}
 
+/* ============================================================
+   QEEL hybride : gros compteurs + listes vivantes
+   ============================================================ */
+.hnk-qeel-counts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 18px}
+.hnk-stat{
+  position:relative;padding:12px 14px;
+  background:linear-gradient(180deg, rgba(255,87,34,.07), rgba(255,87,34,.01));
+  border:1px solid rgba(255,87,34,.20);
+  clip-path:polygon(0 6px,6px 0,100% 0,100% calc(100% - 6px),calc(100% - 6px) 100%,0 100%);
+}
+.hnk-stat .num{
+  display:block;font:900 30px/1 var(--display);letter-spacing:.02em;color:var(--white);
+  text-shadow:0 0 18px rgba(255,87,34,.35);
+}
+.hnk-stat span{
+  display:block;margin-top:5px;font:700 9px/1 var(--ui);letter-spacing:.32em;
+  text-transform:uppercase;color:var(--ember);
+}
+
+.hnk-qeel-live{display:grid;gap:15px;margin:0 0 16px}
+.hnk-qeel-block h5{
+  margin:0 0 8px;font:700 10px/1 var(--ui);letter-spacing:.28em;text-transform:uppercase;
+  color:var(--bone);display:flex;align-items:center;gap:7px;
+}
+.hnk-onl-dot{
+  width:6px;height:6px;border-radius:50%;background:#3ddc84;
+  box-shadow:0 0 8px #3ddc84;animation:hnk-onl-pulse 2s infinite;
+}
+@keyframes hnk-onl-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hnk-onl-count{font:700 10px/1 var(--ui);color:var(--ember);letter-spacing:0}
+.hnk-userlist{font-size:11px;line-height:1.75;color:var(--smoke);word-break:break-word}
+.hnk-userlist a{
+  color:var(--bone);text-decoration:none;border-bottom:1px solid transparent;transition:.15s;
+}
+.hnk-userlist a:hover{color:var(--ember);border-color:rgba(255,87,34,.5)}
+.hnk-userlist .hnk-empty{color:var(--ash);font-style:italic}
+
+.hnk-qeel-newest{margin:0 0 5px;font-size:11px;color:var(--smoke)}
+.hnk-qeel-newest .hnk-newest-lab{
+  color:var(--ember);font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:9px;
+}
+.hnk-qeel-newest a{color:var(--bone);text-decoration:none}
+.hnk-qeel-newest a:hover{color:var(--ember)}
+.hnk-qeel-record{margin:0 0 12px;font-size:10px;color:var(--ash);line-height:1.5}
+.hnk-qeel-quote{margin:0;font-style:italic;font-size:12px;color:var(--smoke)}
+
 .hnk-foot-meta{
   position:relative;
   margin-top:22px;padding-top:16px;

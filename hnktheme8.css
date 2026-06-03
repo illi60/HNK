@@ -1222,10 +1222,9 @@ a{color:inherit;text-decoration:none}
   font:700 9px/1 var(--ui);letter-spacing:.36em;text-transform:uppercase;
   color:rgba(255,255,255,.8);text-shadow:0 1px 6px rgba(0,0,0,.9), 0 0 2px rgba(0,0,0,.8);
 }
-/* Image de portrait : remplit le cadre en "cover", sous le label.
-   Quand un src est renseigné, le label « [ Portrait … ] » disparaît tout seul. */
+/* Image de portrait : remplit le cadre en "cover", SOUS la vignette (::after)
+   et le label. Le label « VOLONTÉ / HÉRITAGE » reste affiché en LÉGENDE. */
 .hnk-portrait-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-
 .hnk-foot-col h4{
   margin:0 0 14px;font:900 16px/1 var(--display);letter-spacing:.34em;text-transform:uppercase;
   color:var(--white);padding-bottom:12px;
@@ -1608,6 +1607,7 @@ body.hnk-body .hnk-footer{
 .hnk-members{
   padding:24px 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;
 }
+/* ---- carte banniere ------------------------------------------------ */
 .hnk-member{
   --clan:var(--ember,#FF5722);
   position:relative;display:block;overflow:hidden;isolation:isolate;
@@ -1621,6 +1621,7 @@ body.hnk-body .hnk-footer{
   border-color:color-mix(in srgb, var(--clan) 55%, transparent);
   box-shadow:0 18px 44px rgba(0,0,0,.5), 0 0 30px color-mix(in srgb, var(--clan) 22%, transparent);
 }
+/* image de fond du profil (remplie par JS) + voile degrade pour lisibilite */
 .hnk-member .bg{
   position:absolute;inset:0;z-index:0;
   background-size:cover;background-position:center;background-repeat:no-repeat;
@@ -1637,6 +1638,7 @@ body.hnk-body .hnk-footer{
     radial-gradient(130% 100% at 72% 6%, color-mix(in srgb, var(--clan) 16%, transparent), transparent 60%),
     linear-gradient(180deg,#171A20,#0C0E12);
 }
+/* embleme de clan en filigrane (SVG injecte par JS, currentColor) */
 .hnk-member .crest{
   position:absolute;right:10px;bottom:54px;z-index:1;width:134px;height:134px;
   display:flex;align-items:center;justify-content:center;
@@ -1648,7 +1650,9 @@ body.hnk-body .hnk-footer{
   background:radial-gradient(circle, rgba(4,5,8,.72), rgba(4,5,8,0) 67%);
 }
 .hnk-member .crest svg{width:100%;height:100%;display:block}
+/* lien plein-carte */
 .hnk-member .lnk{position:absolute;inset:0;z-index:2;display:block}
+/* avatar rond, bas-gauche, chevauchant le pied */
 .hnk-member .av{
   position:absolute;left:18px;bottom:50px;z-index:3;
   width:84px;height:84px;border-radius:50%;overflow:hidden;pointer-events:none;
@@ -1659,6 +1663,7 @@ body.hnk-body .hnk-footer{
   width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;
   object-fit:cover;display:block;border-radius:50%;
 }
+/* pseudo : la couleur de groupe inline (usr_grp_clr) prime sur le blanc */
 .hnk-member .nm{
   position:absolute;right:16px;top:40%;transform:translateY(-50%);z-index:3;
   max-width:60%;text-align:right;pointer-events:none;
@@ -1666,6 +1671,7 @@ body.hnk-body .hnk-footer{
   color:var(--white);text-shadow:0 2px 10px rgba(0,0,0,.85), 0 0 2px rgba(0,0,0,.9);
   word-break:break-word;
 }
+/* pied : actions a gauche, derniere visite a droite */
 .hnk-member .foot{
   position:absolute;left:0;right:0;bottom:0;z-index:3;height:44px;
   display:flex;align-items:center;justify-content:space-between;
@@ -1683,6 +1689,7 @@ body.hnk-body .hnk-footer{
   transition:background .15s, border-color .15s;
 }
 .hnk-member .acts .ic a:hover{background:color-mix(in srgb, var(--clan) 22%, rgba(9,11,15,.6));border-color:var(--clan)}
+/* on masque les <img> natifs FA et on pose une icone Material Symbols propre */
 .hnk-member .acts .ic a img{display:none!important}
 .hnk-member .acts .ic a::before{
   font-family:'Material Symbols Outlined';font-weight:400;font-size:17px;line-height:1;
@@ -2886,7 +2893,7 @@ body.hnk-body form[name="form_login"]{max-width:560px !important;margin:24px aut
 body.hnk-body form[name="form_login"] .panel{margin-bottom:0 !important}
 body.hnk-body .panel:has(a.button2[href="/register"]){max-width:560px !important;margin:10px auto 24px !important}
 
-/* ===== Fin AUTH & SYSTEME ===== */
+/* ===== Fin AUTH & SYSTEME ===== */            
 /* === UCP tabs (onglets profil) — global pour couvrir aussi /search (Sujets surveilles, Favoris) === */
 body.hnk-body #tabs{margin:6px 0 18px!important;padding:0!important}
 body.hnk-body #tabs>ul{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
@@ -2923,7 +2930,7 @@ body.hnk-body #cp-main table.table1 td:nth-child(7){color:var(--smoke,#6C7079)!i
 body.hnk-body #cp-main table.table1 td:nth-child(7) b{color:var(--bone,#DBDEE2)!important;font-weight:700}
 body.hnk-body #cp-main table.table1 td:nth-child(1) img{opacity:.5;filter:grayscale(.4)}
 body.hnk-body #cp-main table.table1 td:nth-child(8) input{cursor:pointer}
-            
+
 /* ============================================================
    HNK — Carte Technique (export depuis l'app Fiches → coller sur le forum)
    ============================================================ */

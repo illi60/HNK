@@ -142,6 +142,7 @@
 .hnkf-staff-body{
   position:relative; z-index:2; font-size:14px; color:var(--f-bone);
   padding-left:16px; border-left:2px solid color-mix(in srgb, var(--c) 35%, transparent);
+  text-align:justify;
 }
 .hnkf-staff-body p:first-letter{ color:var(--f-white) }
 .hnkf-staff-foot{
@@ -312,7 +313,7 @@
 .hnkf-ms-stats .k{ font:700 8px/1 var(--f-ui); letter-spacing:.26em; text-transform:uppercase; color:var(--f-smoke) }
 .hnkf-ms-stats .v{ font-size:13px; color:var(--f-bone) }
 .hnkf-ms-stats .v b{ color:var(--rk); font-weight:700 }
-.hnkf-ms-desc{ font-size:13.5px; color:var(--f-bone) }
+.hnkf-ms-desc{ font-size:13.5px; color:var(--f-bone); text-align:justify }
 
 /* =====================================================================
    4 — RP  ·  en-tête cinématique

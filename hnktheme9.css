@@ -1397,7 +1397,7 @@ html:not(:has(.hnk-on-index)) .hnk-footer{display:none!important}
    (la couleur de groupe native sur le <span> est conservée) */
 .hnk-qeel .hnk-userlist{
   font-size:0!important;line-height:0!important;
-  max-height:92px;overflow-y:auto;overflow-x:hidden;padding-right:5px;
+  max-height:195px;overflow-y:auto;overflow-x:hidden;padding-right:5px;
   scrollbar-width:thin;scrollbar-color:rgba(255,87,34,.45) transparent;
 }
 .hnk-qeel .hnk-userlist::-webkit-scrollbar{width:6px}
@@ -2893,7 +2893,7 @@ body.hnk-body form[name="form_login"]{max-width:560px !important;margin:24px aut
 body.hnk-body form[name="form_login"] .panel{margin-bottom:0 !important}
 body.hnk-body .panel:has(a.button2[href="/register"]){max-width:560px !important;margin:10px auto 24px !important}
 
-/* ===== Fin AUTH & SYSTEME ===== */            
+/* ===== Fin AUTH & SYSTEME ===== */            
 /* === UCP tabs (onglets profil) — global pour couvrir aussi /search (Sujets surveilles, Favoris) === */
 body.hnk-body #tabs{margin:6px 0 18px!important;padding:0!important}
 body.hnk-body #tabs>ul{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}

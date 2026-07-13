@@ -1398,7 +1398,7 @@ html:not(:has(.hnk-on-index)) .hnk-footer{display:none!important}
    (la couleur de groupe native sur le <span> est conservée) */
 .hnk-qeel .hnk-userlist{
   font-size:0!important;line-height:0!important;
-  max-height:92px;overflow-y:auto;overflow-x:hidden;padding-right:5px;
+  max-height:195px;overflow-y:auto;overflow-x:hidden;padding-right:5px;
   scrollbar-width:thin;scrollbar-color:rgba(255,87,34,.45) transparent;
 }
 .hnk-qeel .hnk-userlist::-webkit-scrollbar{width:6px}

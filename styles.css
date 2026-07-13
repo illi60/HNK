@@ -1412,7 +1412,7 @@ html:not(:has(.hnk-on-index)) .hnk-footer{display:none!important}
   text-decoration:none;transition:border-color .15s, background .15s;
   clip-path:polygon(0 4px,4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%);
 }
-.hnk-qeel .hnk-userlist a span,.hnk-qeel .hnk-userlist a strong{font:700 10.5px/1.35 var(--ui)!important;letter-spacing:.04em!important;text-transform:none!important;overflow-wrap:anywhere;word-break:break-word}
+.hnk-qeel .hnk-userlist a span,.hnk-qeel .hnk-userlist a strong{font:700 13px/1.35 var(--ui)!important;letter-spacing:.04em!important;text-transform:none!important;overflow-wrap:anywhere;word-break:break-word}
 .hnk-qeel .hnk-userlist a:hover{border-color:var(--ember);background:rgba(255,87,34,.12)}
 
 /* dernière recrue : phrase masquée, on garde le pseudo (<a>) */
